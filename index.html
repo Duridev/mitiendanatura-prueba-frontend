@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Natura Style - Colección Artística</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .natura-orange { color: #f48120; }
+        .bg-natura-orange { background-color: #f48120; }
+        
+        /* Gradiente artístico para fondos */
+        .bg-artistic-gradient {
+            background: linear-gradient(135deg, #fff5f0 0%, #f3e8ff 100%);
+        }
+        
+        /* Manchas orgánicas de fondo */
+        .blob {
+            position: fixed;
+            z-index: -1;
+            filter: blur(60px);
+            opacity: 0.4;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-artistic-gradient min-h-screen text-gray-800">
+
+    <!-- Blobs decorativos de fondo -->
+    <div class="blob w-64 h-64 bg-orange-200 top-20 -left-20"></div>
+    <div class="blob w-96 h-96 bg-purple-200 bottom-20 -right-20"></div>
+
+    <!-- HEADER -->
+    <header class="bg-white/70 backdrop-blur-md sticky top-0 z-50 border-b border-purple-100">
+        <div class="container mx-auto px-6 py-4 flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-natura-orange rounded-full flex items-center justify-center shadow-lg shadow-orange-200">
+                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L4.5 20.29L5.21 21L12 18L18.79 21L19.5 20.29L12 2Z" />
+                        </svg>
+                    </div>
+                    <span class="text-3xl font-serif italic natura-orange tracking-tighter">natura</span>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button class="p-2.5 bg-purple-50 rounded-full text-purple-400 hover:text-purple-600 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Buscador Artístico -->
+            <div class="relative group">
+                <input type="text" placeholder="Encuentra tu esencia..." class="w-full bg-white/50 border border-purple-100 rounded-2xl py-3 px-6 pr-14 focus:outline-none focus:ring-2 focus:ring-orange-200 transition-all placeholder:italic text-gray-500">
+                <button class="absolute right-2 top-2 bottom-2 px-5 rounded-xl bg-natura-orange text-white shadow-md hover:bg-orange-600 transition-all">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        
+        <!-- SECCIÓN 1: CATÁLOGO PÚBLICO -->
+        <section id="catalogo-publico">
+            <div class="text-center mb-12">
+                <span class="text-purple-400 font-semibold tracking-widest uppercase text-xs">Exclusividad & Belleza</span>
+                <h2 class="text-4xl md:text-5xl font-serif text-gray-800 mt-2">Los más deseados</h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-orange-400 to-purple-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+            
+            <!-- Grilla de Productos -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+                
+                <!-- Tarjeta de Producto 1 -->
+                <article class="bg-white/60 backdrop-blur-sm rounded-[2.5rem] p-4 shadow-xl shadow-purple-900/5 border border-white hover:translate-y-[-8px] transition-all duration-500 group flex flex-col">
+                    <div class="relative aspect-[4/5] rounded-[2rem] bg-gradient-to-b from-purple-50 to-white overflow-hidden flex items-center justify-center mb-6">
+                        <span class="absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Novedad</span>
+                        <img src="https://placehold.co/400x500/png?text=Kriska" alt="Kriska" class="max-h-full w-full object-cover rounded-[2rem] drop-shadow-2xl group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    
+                    <div class="px-2 flex flex-col flex-grow">
+                        <span class="text-purple-400 text-[11px] font-bold tracking-widest uppercase mb-1">Kriska</span>
+                        <!-- Nombre con más tamaño y presencia -->
+                        <h3 class="text-xl md:text-2xl font-serif text-gray-900 line-clamp-2 leading-tight mb-4 min-h-[3.5rem]">Kriska Shock Eau de Toilette</h3>
+                        
+                        <div class="mt-auto">
+                            <div class="flex items-end gap-2 mb-6">
+                                <div>
+                                    <!-- Precio original más oscuro -->
+                                    <p class="text-sm text-gray-500 line-through font-semibold">$25.290</p>
+                                    <p class="text-2xl font-bold text-gray-900 tracking-tighter">$16.430</p>
+                                </div>
+                                <span class="bg-orange-100 text-orange-600 text-xs font-bold px-2 py-1 rounded-lg mb-1">-35%</span>
+                            </div>
+                            
+                            <button class="w-full py-4 bg-white border-2 border-green-500/20 rounded-2xl text-green-700 font-bold hover:bg-green-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 group/btn">
+                                <svg class="w-6 h-6 text-green-500 group-hover/btn:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg>
+                                <span class="uppercase tracking-widest text-xs">Consultar</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Tarjeta de Producto 2 -->
+                <article class="bg-white/60 backdrop-blur-sm rounded-[2.5rem] p-4 shadow-xl shadow-purple-900/5 border border-white hover:translate-y-[-8px] transition-all duration-500 group flex flex-col">
+                    <div class="relative aspect-[4/5] rounded-[2rem] bg-gradient-to-b from-purple-50 to-white overflow-hidden flex items-center justify-center mb-6">
+                        <img src="https://placehold.co/400x500/png?text=Humor" alt="Humor" class="max-h-full w-full object-cover rounded-[2rem] drop-shadow-2xl group-hover:scale-110 transition-transform duration-700">
+                    </div>
+                    
+                    <div class="px-2 flex flex-col flex-grow">
+                        <span class="text-purple-400 text-[11px] font-bold tracking-widest uppercase mb-1">Humor</span>
+                        <!-- Nombre con más tamaño y presencia -->
+                        <h3 class="text-xl md:text-2xl font-serif text-gray-900 line-clamp-2 leading-tight mb-4 min-h-[3.5rem]">Humor Paz y Humor Masculino</h3>
+                        
+                        <div class="mt-auto">
+                            <div class="flex items-end gap-2 mb-6">
+                                <div>
+                                    <!-- Precio original más oscuro -->
+                                    <p class="text-sm text-gray-500 line-through font-semibold">$33.990</p>
+                                    <p class="text-2xl font-bold text-gray-900 tracking-tighter">$18.695</p>
+                                </div>
+                                <span class="bg-orange-100 text-orange-600 text-xs font-bold px-2 py-1 rounded-lg mb-1">-45%</span>
+                            </div>
+                            
+                            <button class="w-full py-4 bg-white border-2 border-green-500/20 rounded-2xl text-green-700 font-bold hover:bg-green-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 group/btn">
+                                <svg class="w-6 h-6 text-green-500 group-hover/btn:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg>
+                                <span class="uppercase tracking-widest text-xs">Consultar</span>
+                            </button>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- DASHBOARD DE ADMINISTRACIÓN -->
+        <section id="dashboard-admin" class="hidden max-w-2xl mx-auto">
+            <div class="bg-white/80 backdrop-blur-xl rounded-[3rem] shadow-2xl p-8 md:p-12 border border-white">
+                <div class="flex items-center gap-6 mb-10">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-orange-400 rounded-3xl flex items-center justify-center text-white shadow-xl">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-serif text-gray-800">Galería Privada</h2>
+                        <p class="text-purple-400 italic">Crea nuevas experiencias para tus clientes</p>
+                    </div>
+                </div>
+
+                <form class="space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Nombre de la Pieza</label>
+                            <input type="text" placeholder="Ej: Esencia de Jazmín" class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Valor Comercial ($)</label>
+                            <input type="number" placeholder="0.00" class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Colección</label>
+                            <select class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all">
+                                <option>Seleccionar línea...</option>
+                                <option>Kriska</option>
+                                <option>Humor</option>
+                                <option>Tododia</option>
+                            </select>
+                        </div>
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Enlace de Imagen Artística</label>
+                            <input type="url" placeholder="https://..." class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all text-sm">
+                        </div>
+                        <div class="col-span-1 md:col-span-2">
+                            <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Inspiración (Descripción)</label>
+                            <textarea rows="4" placeholder="Describe la sensación del aroma..." class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all resize-none"></textarea>
+                        </div>
+                    </div>
+                    <div class="pt-6 flex flex-col md:flex-row gap-4">
+                        <button type="submit" class="flex-grow bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold py-5 rounded-2xl shadow-xl shadow-orange-200 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                            Publicar Obra
+                        </button>
+                        <button type="button" onclick="window.location.reload()" class="px-10 py-5 text-purple-400 font-bold hover:text-purple-600 transition-colors">
+                            Descartar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- BOTÓN FLOTANTE (FAB) WHATSAPP NARANJA -->
+    <button class="fixed bottom-24 md:bottom-10 right-8 w-16 h-16 bg-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 transition-all z-40 border-2 border-orange-50 group">
+        <div class="absolute inset-0 bg-orange-500 rounded-full scale-0 group-hover:scale-100 transition-transform duration-300 opacity-10"></div>
+        <svg class="w-10 h-10 natura-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg>
+    </button>
+
+    <!-- NAVEGACIÓN INFERIOR ARTÍSTICA -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-purple-50 flex justify-around items-center py-4 md:hidden z-50">
+        <button onclick="document.getElementById('catalogo-publico').classList.remove('hidden'); document.getElementById('dashboard-admin').classList.add('hidden')" class="flex flex-col items-center gap-1 natura-orange">
+            <div class="w-10 h-1 bg-natura-orange rounded-full absolute top-0 scale-x-75"></div>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 11-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Galería</span>
+        </button>
+        <button onclick="document.getElementById('catalogo-publico').classList.add('hidden'); document.getElementById('dashboard-admin').classList.remove('hidden')" class="flex flex-col items-center gap-1 text-gray-300 hover:text-purple-500 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+            <span class="text-[10px] font-bold uppercase tracking-tighter">Estudio</span>
+        </button>
+    </nav>
+
+</body>
+</html>
