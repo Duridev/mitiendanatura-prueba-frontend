@@ -146,21 +146,34 @@
         </section>
 
         <!-- DASHBOARD DE ADMINISTRACIÓN -->
-        <section id="dashboard-admin" class="hidden max-w-2xl mx-auto">
+        <section id="dashboard-admin" class="hidden max-w-4xl mx-auto pb-10">
             <div class="bg-white/80 backdrop-blur-xl rounded-[3rem] shadow-2xl p-8 md:p-12 border border-white">
-                <div class="flex items-center gap-6 mb-10">
-                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-orange-400 rounded-3xl flex items-center justify-center text-white shadow-xl">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                
+                <!-- Cabecera y Tabs -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                    <div class="flex items-center gap-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-orange-400 rounded-3xl flex items-center justify-center text-white shadow-xl shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h2 class="text-3xl font-serif text-gray-800">Estudio</h2>
+                            <p class="text-purple-400 italic text-sm md:text-base">Gestiona el catálogo de productos</p>
+                        </div>
                     </div>
-                    <div>
-                        <h2 class="text-3xl font-serif text-gray-800">Galería Privada</h2>
-                        <p class="text-purple-400 italic">Crea nuevas experiencias para tus clientes</p>
+                    
+                    <!-- Botonera de Tabs -->
+                    <div class="flex bg-purple-50 p-1.5 rounded-2xl w-full md:w-auto shrink-0">
+                        <button id="btn-tab-crear" onclick="cambiarTab('crear')" class="flex-1 md:flex-none px-6 py-3 rounded-xl bg-white shadow-sm text-purple-600 font-bold text-sm transition-all">Crear Obra</button>
+                        <button id="btn-tab-gestionar" onclick="cambiarTab('gestionar')" class="flex-1 md:flex-none px-6 py-3 rounded-xl text-gray-500 font-bold text-sm hover:text-purple-600 transition-all">Gestionar</button>
                     </div>
                 </div>
 
-                <form id="form-nuevo-producto" class="space-y-8">
+                <!-- TAB 1: CREAR / EDITAR PRODUCTO -->
+                <div id="tab-crear" class="block animate-fade-in">
+                    <form id="form-nuevo-producto" class="space-y-8">
+                        <input type="hidden" id="edit-id">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div class="col-span-1 md:col-span-2">
                             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Nombre de la Pieza</label>
@@ -191,14 +204,35 @@
                         </div>
                     </div>
                     <div class="pt-6 flex flex-col md:flex-row gap-4">
-                        <button type="submit" class="flex-grow bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold py-5 rounded-2xl shadow-xl shadow-orange-200 hover:scale-[1.02] active:scale-[0.98] transition-all">
+                        <button type="submit" id="btn-submit-producto" class="flex-grow bg-gradient-to-r from-orange-500 to-orange-400 text-white font-bold py-5 rounded-2xl shadow-xl shadow-orange-200 hover:scale-[1.02] active:scale-[0.98] transition-all">
                             Publicar Obra
                         </button>
-                        <button type="button" onclick="window.location.reload()" class="px-10 py-5 text-purple-400 font-bold hover:text-purple-600 transition-colors">
-                            Descartar
+                        <button type="button" onclick="cancelarEdicion()" class="px-10 py-5 text-purple-400 font-bold hover:text-purple-600 transition-colors">
+                            Limpiar / Cancelar
                         </button>
                     </div>
                 </form>
+                </div> <!-- Fin Tab Crear -->
+
+                <!-- TAB 2: GESTIONAR PRODUCTOS -->
+                <div id="tab-gestionar" class="hidden animate-fade-in">
+                    <div class="overflow-x-auto bg-white rounded-2xl border border-purple-50 shadow-sm">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-purple-50/50 text-xs uppercase tracking-widest text-purple-400">
+                                    <th class="px-6 py-4 font-bold rounded-tl-2xl">Imagen</th>
+                                    <th class="px-6 py-4 font-bold">Detalles</th>
+                                    <th class="px-6 py-4 font-bold">Precio</th>
+                                    <th class="px-6 py-4 font-bold text-right rounded-tr-2xl">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabla-productos" class="divide-y divide-purple-50 text-sm">
+                                <!-- Filas dinámicas -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div> <!-- Fin Tab Gestionar -->
+
             </div>
         </section>
 
@@ -250,11 +284,32 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
                 </svg>
             </div>
-            <h3 class="text-2xl font-serif text-gray-800 mb-2">¡Obra Publicada!</h3>
-            <p class="text-gray-500 mb-8 text-sm">El producto se ha agregado correctamente al catálogo.</p>
+            <h3 id="popup-exito-titulo" class="text-2xl font-serif text-gray-800 mb-2">¡Obra Publicada!</h3>
+            <p id="popup-exito-mensaje" class="text-gray-500 mb-8 text-sm">El producto se ha agregado correctamente al catálogo.</p>
             <button onclick="cerrarPopupExito()" class="w-full py-4 bg-gradient-to-r from-green-400 to-green-500 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all">
                 Aceptar
             </button>
+        </div>
+    </div>
+
+    <!-- MODAL CONFIRMAR ELIMINACIÓN -->
+    <div id="modal-eliminar" class="fixed inset-0 z-[200] hidden flex-col justify-end md:justify-center items-center p-0 md:p-4 bg-gray-900/50 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-white/95 backdrop-blur-md rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-2xl p-8 max-w-sm w-full text-center transform translate-y-full md:translate-y-0 md:scale-95 transition-transform duration-500 ease-out">
+            <div class="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-6 text-red-500 shadow-inner">
+                <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-serif text-gray-800 mb-2">Eliminar Obra</h3>
+            <p id="texto-modal-eliminar" class="text-gray-500 mb-8 text-sm">¿Estás seguro de que deseas eliminar este producto?</p>
+            <div class="flex gap-3">
+                <button onclick="cerrarModalEliminar()" class="flex-1 py-4 bg-gray-100 text-gray-600 font-bold rounded-2xl hover:bg-gray-200 transition-colors">
+                    Cancelar
+                </button>
+                <button onclick="confirmarEliminacion()" class="flex-1 py-4 bg-red-500 text-white font-bold rounded-2xl shadow-lg hover:bg-red-600 transition-colors">
+                    Sí, eliminar
+                </button>
+            </div>
         </div>
     </div>
 

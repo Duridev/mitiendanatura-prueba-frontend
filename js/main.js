@@ -51,7 +51,27 @@ let inventarioInicial = [
 
 const guardadoLocal = localStorage.getItem('natura_productos');
 if (guardadoLocal) {
-    inventarioInicial = JSON.parse(guardadoLocal);
+    try {
+        const parsed = JSON.parse(guardadoLocal);
+        // Validar estricto que sea un array y tenga las propiedades necesarias
+        if (Array.isArray(parsed)) {
+            if (parsed.length === 0) {
+                inventarioInicial = parsed;
+            } else {
+                const isValid = parsed.every(p => p.nombre && p.categoria && p.imagenUrl !== undefined);
+                if (isValid) {
+                    inventarioInicial = parsed;
+                } else {
+                    console.warn("Datos locales corruptos, restaurando iniciales");
+                    localStorage.removeItem('natura_productos');
+                }
+            }
+        } else {
+            localStorage.removeItem('natura_productos');
+        }
+    } catch(e) {
+        localStorage.removeItem('natura_productos');
+    }
 }
 
 // 2. REFERENCIAS AL DOM
@@ -85,7 +105,8 @@ function renderizarCatalogo(lista) {
 
     // Función de saneamiento para evitar vulnerabilidades XSS
     const escapeHTML = (str) => {
-        return str.replace(/[&<>'"]/g, 
+        if (!str) return "";
+        return String(str).replace(/[&<>'"]/g, 
             tag => ({
                 '&': '&amp;',
                 '<': '&lt;',
@@ -349,31 +370,210 @@ if (formNuevoProducto) {
             return;
         }
 
-        const nuevoProducto = {
-            nombre,
-            precioOriginal,
-            precio,
-            categoria,
-            imagenUrl,
-            descripcion: '', 
-            isNuevo
-        };
-
-        // Guardar en el catálogo principal (al principio)
-        inventarioInicial.unshift(nuevoProducto);
-        localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
+        const editId = document.getElementById('edit-id').value;
         
-        // Forzar vista completa para asegurar que el nuevo producto se vea
+        if (editId) {
+            // Modo Edición
+            const index = inventarioInicial.findIndex(p => p.id === editId);
+            if (index > -1) {
+                inventarioInicial[index] = {
+                    ...inventarioInicial[index],
+                    nombre, precioOriginal, precio, categoria, imagenUrl, isNuevo
+                };
+                localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
+                
+                const tit = document.getElementById('popup-exito-titulo');
+                const msj = document.getElementById('popup-exito-mensaje');
+                if(tit) tit.textContent = '¡Obra Actualizada!';
+                if(msj) msj.textContent = 'Los cambios se han guardado correctamente.';
+                
+                mostrarPopupExito();
+            }
+        } else {
+            // Modo Creación
+            const nuevoProducto = {
+                id: 'nat-' + Date.now(), // Generar ID único
+                nombre,
+                precioOriginal,
+                precio,
+                categoria,
+                imagenUrl,
+                descripcion: '', 
+                isNuevo
+            };
+
+            inventarioInicial.unshift(nuevoProducto);
+            localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
+            
+            const tit = document.getElementById('popup-exito-titulo');
+            const msj = document.getElementById('popup-exito-mensaje');
+            if(tit) tit.textContent = '¡Obra Publicada!';
+            if(msj) msj.textContent = 'El producto se ha agregado correctamente al catálogo.';
+            
+            mostrarPopupExito();
+        }
+        
+        // Forzar vista completa para asegurar que los cambios se vean
         categoriaActiva = 'Todas';
         inputBusqueda.value = '';
         
         // Refrescar UI completa
         renderizarCategorias();
         filtrarProductos(); 
+        if (!document.getElementById('tab-gestionar').classList.contains('hidden')) {
+            renderizarTablaProductos();
+        }
         
-        mostrarPopupExito();
-        formNuevoProducto.reset();
+        cancelarEdicion(); // Resetear formulario
     });
+}
+
+// 8. FUNCIONES DEL DASHBOARD CRUD
+
+// Cambiar Tabs
+function cambiarTab(tab) {
+    const tabCrear = document.getElementById('tab-crear');
+    const tabGestionar = document.getElementById('tab-gestionar');
+    const btnCrear = document.getElementById('btn-tab-crear');
+    const btnGestionar = document.getElementById('btn-tab-gestionar');
+    
+    if(tab === 'crear') {
+        tabCrear.classList.remove('hidden');
+        tabGestionar.classList.add('hidden');
+        
+        btnCrear.className = "flex-1 md:flex-none px-6 py-3 rounded-xl bg-white shadow-sm text-purple-600 font-bold text-sm transition-all";
+        btnGestionar.className = "flex-1 md:flex-none px-6 py-3 rounded-xl text-gray-500 font-bold text-sm hover:text-purple-600 transition-all";
+    } else {
+        tabCrear.classList.add('hidden');
+        tabGestionar.classList.remove('hidden');
+        
+        btnGestionar.className = "flex-1 md:flex-none px-6 py-3 rounded-xl bg-white shadow-sm text-purple-600 font-bold text-sm transition-all";
+        btnCrear.className = "flex-1 md:flex-none px-6 py-3 rounded-xl text-gray-500 font-bold text-sm hover:text-purple-600 transition-all";
+        
+        renderizarTablaProductos();
+    }
+}
+
+// Renderizar Tabla
+function renderizarTablaProductos() {
+    const tbody = document.getElementById('tabla-productos');
+    if(!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    inventarioInicial.forEach(producto => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-purple-50/30 transition-colors";
+        
+        tr.innerHTML = `
+            <td class="px-6 py-4">
+                <img src="${producto.imagenUrl}" alt="${producto.nombre}" class="w-12 h-12 rounded-lg object-cover shadow-sm">
+            </td>
+            <td class="px-6 py-4">
+                <p class="font-bold text-gray-800">${producto.nombre}</p>
+                <p class="text-xs text-purple-400 uppercase tracking-wider">${producto.categoria}</p>
+            </td>
+            <td class="px-6 py-4 font-bold text-gray-600">
+                $${producto.precio.toLocaleString('es-CL')}
+            </td>
+            <td class="px-6 py-4 text-right space-x-2">
+                <button onclick="cargarProductoParaEdicion('${producto.id}')" class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" title="Editar">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                </button>
+                <button onclick="abrirModalEliminar('${producto.id}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                </button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+// Cargar para Edición
+function cargarProductoParaEdicion(id) {
+    const producto = inventarioInicial.find(p => p.id === id);
+    if(!producto) return;
+    
+    document.getElementById('edit-id').value = producto.id;
+    document.getElementById('nuevo-nombre').value = producto.nombre;
+    document.getElementById('nuevo-precio-original').value = producto.precioOriginal || '';
+    document.getElementById('nuevo-precio').value = producto.precio;
+    document.getElementById('nuevo-categoria').value = producto.categoria;
+    document.getElementById('nuevo-imagen').value = producto.imagenUrl;
+    document.getElementById('nuevo-is-nuevo').checked = producto.isNuevo;
+    
+    const btnSubmit = document.getElementById('btn-submit-producto');
+    if(btnSubmit) btnSubmit.textContent = 'Actualizar Obra';
+    
+    cambiarTab('crear');
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Cancelar Edición
+function cancelarEdicion() {
+    const form = document.getElementById('form-nuevo-producto');
+    if(form) form.reset();
+    const editId = document.getElementById('edit-id');
+    if(editId) editId.value = '';
+    
+    const btnSubmit = document.getElementById('btn-submit-producto');
+    if(btnSubmit) btnSubmit.textContent = 'Publicar Obra';
+}
+
+// Modal Eliminar
+let productoAEliminarId = null;
+const modalEliminar = document.getElementById('modal-eliminar');
+
+function abrirModalEliminar(id) {
+    productoAEliminarId = id;
+    const producto = inventarioInicial.find(p => p.id === id);
+    if(producto) {
+        document.getElementById('texto-modal-eliminar').textContent = `¿Estás seguro de que deseas eliminar "${producto.nombre}"?`;
+    }
+    
+    if(modalEliminar) {
+        modalEliminar.classList.remove('hidden');
+        modalEliminar.classList.add('flex');
+        void modalEliminar.offsetWidth;
+        modalEliminar.classList.remove('opacity-0');
+        
+        const modalInner = modalEliminar.querySelector('.transform');
+        if(modalInner) {
+            modalInner.classList.replace('translate-y-full', 'translate-y-0');
+            modalInner.classList.replace('md:scale-95', 'md:scale-100');
+        }
+    }
+}
+
+function cerrarModalEliminar() {
+    if(!modalEliminar) return;
+    const modalInner = modalEliminar.querySelector('.transform');
+    if(modalInner) {
+        modalInner.classList.replace('translate-y-0', 'translate-y-full');
+        modalInner.classList.replace('md:scale-100', 'md:scale-95');
+    }
+    modalEliminar.classList.add('opacity-0');
+    
+    setTimeout(() => {
+        modalEliminar.classList.add('hidden');
+        modalEliminar.classList.remove('flex');
+        productoAEliminarId = null;
+    }, 500);
+}
+
+function confirmarEliminacion() {
+    if(!productoAEliminarId) return;
+    
+    const index = inventarioInicial.findIndex(p => p.id === productoAEliminarId);
+    if(index > -1) {
+        inventarioInicial.splice(index, 1);
+        localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
+        renderizarCategorias();
+        filtrarProductos();
+        renderizarTablaProductos();
+    }
+    
+    cerrarModalEliminar();
 }
 
 // Funciones del Popup de Éxito

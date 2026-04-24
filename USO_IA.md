@@ -102,3 +102,15 @@ El Modal debe tener dos botones: 'Cancelar' (cierra el modal sin hacer nada) y '
 Si se confirma, el producto debe eliminarse del arreglo mediante su id, el localStorage debe actualizarse, el Modal debe cerrarse y la lista de productos en el DOM debe volver a renderizarse sin recargar la página.
 
 Crear las modificaciones necesarias para las pestañas y el modal, y el código JavaScript correspondiente, asegurándote de usar buenas prácticas, funciones modulares y manipulación segura del DOM.
+
+---
+
+Algo pasó. los productos no aparecen, solo dos producto que ni siquiera estaban antes: "Kriska Shock Eau de Toilette" y "Humor Paz y Humor Masculino", pero sin imagen. el boton de login ya no sirve, el de whatsapp volvió al estilo inicial, tampoco aparecen las cápsulas de las categorías.
+
+---
+
+no, no es eso. Lo probé en otro navegador y pasa lo mismo. Ni siquiera aparecen los productos que tengo quemados, que ya vienen por defecto en el main.js en el array inventarioInicial.
+
+---
+
+No puedo eliminar los productos creados, ni editarlos. Presiono los botones y no pasa nada, pero solo con los del local storage. los que vienen quemados sí se pueden editar y eliminar. 
