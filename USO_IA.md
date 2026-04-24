@@ -114,3 +114,7 @@ no, no es eso. Lo probé en otro navegador y pasa lo mismo. Ni siquiera aparecen
 ---
 
 No puedo eliminar los productos creados, ni editarlos. Presiono los botones y no pasa nada, pero solo con los del local storage. los que vienen quemados sí se pueden editar y eliminar. 
+
+---
+
+Ahora haz un tercer botón en la parte superior derecha que diga "Eliminar Local Storage", que al presionarlo me borre todo el local storage y me recargue la página, eliminando todos los cambios y restaurando solo los 4 objetos quemados. y al hacerlo, en el lugar de "Colección" aparezca un pop up con un check y diga "Catálogo restaurado exitosamente"

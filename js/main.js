@@ -60,7 +60,15 @@ if (guardadoLocal) {
             } else {
                 const isValid = parsed.every(p => p.nombre && p.categoria && p.imagenUrl !== undefined);
                 if (isValid) {
+                    // Asegurar que todos tengan ID (por si se crearon antes de implementar los IDs dinámicos)
+                    parsed.forEach((p, index) => {
+                        if (!p.id) {
+                            p.id = 'nat-gen-' + Date.now() + '-' + index;
+                        }
+                    });
                     inventarioInicial = parsed;
+                    // Guardar de vuelta para estabilizar los IDs
+                    localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
                 } else {
                     console.warn("Datos locales corruptos, restaurando iniciales");
                     localStorage.removeItem('natura_productos');
