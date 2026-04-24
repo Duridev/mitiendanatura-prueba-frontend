@@ -168,11 +168,11 @@
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Valor Original ($) (Opcional)</label>
-                            <input type="number" id="nuevo-precio-original" placeholder="0.00" class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all">
+                            <input type="number" id="nuevo-precio-original" placeholder="12990" class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all">
                         </div>
                         <div>
                             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Valor Comercial Actual ($)</label>
-                            <input type="number" id="nuevo-precio" placeholder="0.00" required class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all">
+                            <input type="number" id="nuevo-precio" placeholder="19990" required class="w-full bg-purple-50/50 border border-purple-100 rounded-2xl py-4 px-6 focus:ring-2 focus:ring-orange-200 outline-none transition-all">
                         </div>
                         <div class="col-span-1 md:col-span-2">
                             <label class="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 ml-1">Colección</label>
@@ -210,19 +210,7 @@
         <svg class="w-12 h-12 natura-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg>
     </button>
 
-    <!-- NAVEGACIÓN INFERIOR ARTÍSTICA -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/80 backdrop-blur-lg border-t border-purple-50 flex justify-around items-center py-4 md:hidden z-50">
-        <button id="nav-btn-galeria" onclick="abrirGaleria()" class="flex flex-col items-center gap-1 natura-orange">
-            <div class="w-10 h-1 bg-natura-orange rounded-full absolute top-0 scale-x-75 transition-transform" id="indicador-galeria"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 11-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
-            <span class="text-[10px] font-bold uppercase tracking-tighter">Galería</span>
-        </button>
-        <button id="nav-btn-estudio" onclick="abrirEstudio()" class="flex flex-col items-center gap-1 text-gray-300 hover:text-purple-500 transition-colors relative">
-            <div class="w-10 h-1 bg-purple-500 rounded-full absolute top-0 scale-x-0 transition-transform" id="indicador-estudio"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
-            <span class="text-[10px] font-bold uppercase tracking-tighter">Estudio</span>
-        </button>
-    </nav>
+
 
     <!-- MODAL DE LOGIN -->
     <div id="login-modal" class="fixed inset-0 bg-purple-900/40 backdrop-blur-sm z-[100] hidden items-end md:items-center justify-center transition-opacity duration-300 opacity-0">
@@ -251,6 +239,22 @@
                     Ingresar
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- POPUP ÉXITO -->
+    <div id="popup-exito" class="fixed inset-0 z-[200] hidden flex-col justify-end md:justify-center items-center p-0 md:p-4 bg-purple-900/40 backdrop-blur-sm transition-opacity duration-300 opacity-0">
+        <div class="bg-white/95 backdrop-blur-md rounded-t-[2.5rem] md:rounded-[2.5rem] shadow-xl shadow-purple-900/10 p-8 max-w-sm w-full text-center border border-white transform translate-y-full md:translate-y-0 md:scale-95 transition-transform duration-500 ease-out">
+            <div class="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6 text-green-500 shadow-inner">
+                <svg class="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h3 class="text-2xl font-serif text-gray-800 mb-2">¡Obra Publicada!</h3>
+            <p class="text-gray-500 mb-8 text-sm">El producto se ha agregado correctamente al catálogo.</p>
+            <button onclick="cerrarPopupExito()" class="w-full py-4 bg-gradient-to-r from-green-400 to-green-500 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all">
+                Aceptar
+            </button>
         </div>
     </div>
 

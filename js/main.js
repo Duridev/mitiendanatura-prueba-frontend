@@ -6,7 +6,7 @@
  */
 
 // 1. "BASE DE DATOS" INICIAL (Según SPEC-01)
-const inventarioInicial = [
+let inventarioInicial = [
     {
         id: "nat-001",
         nombre: "Pulpa Hidratante para Manos Castaña",
@@ -48,6 +48,11 @@ const inventarioInicial = [
         isNuevo: false
     }
 ];
+
+const guardadoLocal = localStorage.getItem('natura_productos');
+if (guardadoLocal) {
+    inventarioInicial = JSON.parse(guardadoLocal);
+}
 
 // 2. REFERENCIAS AL DOM
 const contenedorGaleria = document.getElementById('contenedor-galeria');
@@ -356,12 +361,49 @@ if (formNuevoProducto) {
 
         // Guardar en el catálogo principal (al principio)
         inventarioInicial.unshift(nuevoProducto);
+        localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
+        
+        // Forzar vista completa para asegurar que el nuevo producto se vea
+        categoriaActiva = 'Todas';
+        inputBusqueda.value = '';
         
         // Refrescar UI completa
         renderizarCategorias();
         filtrarProductos(); 
         
-        alert(`¡Éxito! El producto "${nombre}" ha sido publicado en el catálogo.`);
+        mostrarPopupExito();
         formNuevoProducto.reset();
     });
+}
+
+// Funciones del Popup de Éxito
+const popupExito = document.getElementById('popup-exito');
+
+function mostrarPopupExito() {
+    if(!popupExito) return;
+    popupExito.classList.remove('hidden');
+    popupExito.classList.add('flex');
+    void popupExito.offsetWidth; // Reflow
+    popupExito.classList.remove('opacity-0');
+    
+    const modalInner = popupExito.querySelector('.transform');
+    if(modalInner) {
+        modalInner.classList.replace('translate-y-full', 'translate-y-0');
+        modalInner.classList.replace('md:scale-95', 'md:scale-100');
+    }
+}
+
+function cerrarPopupExito() {
+    if(!popupExito) return;
+    const modalInner = popupExito.querySelector('.transform');
+    if(modalInner) {
+        modalInner.classList.replace('translate-y-0', 'translate-y-full');
+        modalInner.classList.replace('md:scale-100', 'md:scale-95');
+    }
+    popupExito.classList.add('opacity-0');
+    
+    setTimeout(() => {
+        popupExito.classList.add('hidden');
+        popupExito.classList.remove('flex');
+    }, 500);
 }
