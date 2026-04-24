@@ -123,8 +123,23 @@ Ahora haz un tercer botón en la parte superior derecha que diga "Eliminar Local
 
 Que el botón aparezca solo cuando el usuario esté logueado y primero pregunte si estoy seguro de querer eliminar el local storage, poniendo como advertencia que se eliminarán todos los productos agregados y se restaurará el catálogo inicial.
 
---  
+## Quinto prompt para Antigravity - Descuentos - 
 
 Crea al dlado delmprecio, un rectangulo naranjo donde salga el porcentaje del descuento en cada uno de los productos que tengan descuento. Si no tienen descuento, que no aparezca nada.
 
 que el rectangulo sea un poco más grande, que el fondo sea naranja natura y los números blancos.
+
+
+## Sexto prompt para Antigravity - Funcionalidad botón whatsapp 
+
+Actúa como un desarrollador Front-End. En mi catálogo dinámico generado con JavaScript, cada tarjeta de producto tiene un botón de 'Consultar'. Necesito que actualices la lógica de creación de este botón para que genere un enlace de WhatsApp completamente dinámico y seguro.
+
+Requisitos técnicos para el botón:
+
+Número de destino: Usa una variable constante en la parte superior del archivo para el teléfono (ej. const WHATSAPP_PRODUCTO = "56987090528";).
+
+Mensaje dinámico: Utiliza Template Literals (Template Strings) para armar un mensaje que diga exactamente: "Hola Amanda, me interesa el producto [Nombre del Producto] que está a un valor de $[Precio]. ¿Aún te queda stock?". Los datos deben extraerse del objeto del producto iterado.
+
+Seguridad de URL: El mensaje completo debe pasar obligatoriamente por la función encodeURIComponent() antes de concatenarse a la URL base de WhatsApp (https://wa.me/).
+
+Comportamiento: El enlace debe abrirse en una pestaña nueva (target="_blank").

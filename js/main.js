@@ -5,6 +5,9 @@
  * mediante document.createElement, evitando vulnerabilidades XSS.
  */
 
+// Constantes de Configuración
+const WHATSAPP_PRODUCTO = "56987090528";
+
 // 1. "BASE DE DATOS" INICIAL (Según SPEC-01)
 let inventarioInicial = [
     {
@@ -77,7 +80,7 @@ if (guardadoLocal) {
         } else {
             localStorage.removeItem('natura_productos');
         }
-    } catch(e) {
+    } catch (e) {
         localStorage.removeItem('natura_productos');
     }
 }
@@ -114,7 +117,7 @@ function renderizarCatalogo(lista) {
     // Función de saneamiento para evitar vulnerabilidades XSS
     const escapeHTML = (str) => {
         if (!str) return "";
-        return String(str).replace(/[&<>'"]/g, 
+        return String(str).replace(/[&<>'"]/g,
             tag => ({
                 '&': '&amp;',
                 '<': '&lt;',
@@ -129,8 +132,10 @@ function renderizarCatalogo(lista) {
         const nombreSeguro = escapeHTML(producto.nombre);
         const categoriaSegura = escapeHTML(producto.categoria);
         const precioFormateado = producto.precio.toLocaleString('es-CL');
-        const mensajeWa = `Hola, me interesa el producto: ${producto.nombre} ($${producto.precio})`;
-        const hrefWa = `https://wa.me/56912345678?text=${encodeURIComponent(mensajeWa)}`;
+        
+        // WhatsApp Dinámico y Seguro
+        const mensajeWa = `Hola Amanda, me interesa el producto ${producto.nombre} que está a un valor de $${precioFormateado}. ¿Aún te queda stock?`;
+        const hrefWa = `https://wa.me/${WHATSAPP_PRODUCTO}?text=${encodeURIComponent(mensajeWa)}`;
 
         const precioOriginalFormateado = producto.precioOriginal ? producto.precioOriginal.toLocaleString('es-CL') : '';
         const htmlPrecioOriginal = producto.precioOriginal ? `<p class="text-sm text-gray-500 line-through font-semibold leading-none mb-1">$${precioOriginalFormateado}</p>` : '';
@@ -143,8 +148,8 @@ function renderizarCatalogo(lista) {
         }
 
         // Etiqueta de Novedad condicional
-        const tagNovedad = producto.isNuevo 
-            ? `<span class="absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Novedad</span>` 
+        const tagNovedad = producto.isNuevo
+            ? `<span class="absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Novedad</span>`
             : '';
 
         // Template de la tarjeta copiando el diseño original
@@ -184,10 +189,10 @@ function renderizarCatalogo(lista) {
 // 4. LÓGICA DE CATEGORÍAS
 function renderizarCategorias() {
     if (!contenedorCategorias) return;
-    
+
     const categoriasUnicas = ['Todas', ...new Set(inventarioInicial.map(p => p.categoria))];
     contenedorCategorias.innerHTML = '';
-    
+
     // Actualizar datalist del formulario de agregar producto
     const dataList = document.getElementById('lista-colecciones');
     if (dataList) {
@@ -200,28 +205,28 @@ function renderizarCategorias() {
             }
         });
     }
-    
+
     categoriasUnicas.forEach(categoria => {
         const btn = document.createElement('button');
         btn.textContent = categoria;
-        
+
         // Clases base (menos padding vertical)
         let clases = "px-6 py-1.5 rounded-full font-bold text-sm transition-all duration-300 shadow-sm ";
-        
+
         if (categoria === categoriaActiva) {
             clases += "bg-gradient-to-r from-purple-500 to-purple-600 text-white border-2 border-transparent shadow-md";
         } else {
             clases += "bg-transparent text-purple-600 border-2 border-purple-300 hover:border-purple-400 hover:shadow-md hover:-translate-y-0.5";
         }
-        
+
         btn.className = clases;
-        
+
         btn.addEventListener('click', () => {
             categoriaActiva = categoria;
             renderizarCategorias(); // Para actualizar los colores
             filtrarProductos();
         });
-        
+
         contenedorCategorias.appendChild(btn);
     });
 }
@@ -229,14 +234,14 @@ function renderizarCategorias() {
 // 5. LÓGICA DE BÚSQUEDA Y FILTRADO (Criterio 2: Manejo de Arreglos)
 function filtrarProductos() {
     const terminoBusqueda = inputBusqueda.value.toLowerCase();
-    
+
     const productosFiltrados = inventarioInicial.filter(producto => {
-        const coincideBusqueda = 
+        const coincideBusqueda =
             producto.nombre.toLowerCase().includes(terminoBusqueda) ||
             producto.categoria.toLowerCase().includes(terminoBusqueda);
-            
+
         const coincideCategoria = categoriaActiva === 'Todas' || producto.categoria === categoriaActiva;
-        
+
         return coincideBusqueda && coincideCategoria;
     });
 
@@ -251,23 +256,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Escuchar la barra de búsqueda
     inputBusqueda.addEventListener('input', filtrarProductos);
-    
+
     // Verificar sesión activa
     if (sessionStorage.getItem('natura_auth') === 'true') {
-        if(btnLogout) btnLogout.classList.remove('hidden');
+        if (btnLogout) btnLogout.classList.remove('hidden');
         const btnReset = document.getElementById('btn-reset-db');
-        if(btnReset) btnReset.classList.remove('hidden');
+        if (btnReset) btnReset.classList.remove('hidden');
     }
-    
+
     // Verificar si venimos de un reseteo de base de datos
     if (sessionStorage.getItem('natura_reset') === 'true') {
         sessionStorage.removeItem('natura_reset');
-        
+
         const tit = document.getElementById('popup-exito-titulo');
         const msj = document.getElementById('popup-exito-mensaje');
-        if(tit) tit.textContent = '¡Éxito!';
-        if(msj) msj.textContent = 'Catálogo restaurado exitosamente';
-        
+        if (tit) tit.textContent = '¡Éxito!';
+        if (msj) msj.textContent = 'Catálogo restaurado exitosamente';
+
         setTimeout(() => {
             mostrarPopupExito();
         }, 500); // Pequeño delay para asegurar que el DOM esté listo y haya animación
@@ -285,8 +290,8 @@ function sanitizar(input) {
 function abrirGaleria() {
     catalogoPublico.classList.remove('hidden');
     dashboardAdmin.classList.add('hidden');
-    if(indicadorGaleria) indicadorGaleria.classList.replace('scale-x-0', 'scale-x-75');
-    if(indicadorEstudio) indicadorEstudio.classList.replace('scale-x-75', 'scale-x-0');
+    if (indicadorGaleria) indicadorGaleria.classList.replace('scale-x-0', 'scale-x-75');
+    if (indicadorEstudio) indicadorEstudio.classList.replace('scale-x-75', 'scale-x-0');
 }
 
 function abrirEstudio() {
@@ -294,8 +299,8 @@ function abrirEstudio() {
     if (isAuth === 'true') {
         catalogoPublico.classList.add('hidden');
         dashboardAdmin.classList.remove('hidden');
-        if(indicadorGaleria) indicadorGaleria.classList.replace('scale-x-75', 'scale-x-0');
-        if(indicadorEstudio) indicadorEstudio.classList.replace('scale-x-0', 'scale-x-75');
+        if (indicadorGaleria) indicadorGaleria.classList.replace('scale-x-75', 'scale-x-0');
+        if (indicadorEstudio) indicadorEstudio.classList.replace('scale-x-0', 'scale-x-75');
     } else {
         abrirLoginModal();
     }
@@ -306,9 +311,9 @@ function abrirLoginModal() {
     loginModal.classList.add('flex');
     void loginModal.offsetWidth; // Forzar reflow
     loginModal.classList.remove('opacity-0');
-    
+
     const modalInner = loginModal.querySelector('.transform');
-    if(modalInner) {
+    if (modalInner) {
         modalInner.classList.remove('translate-y-full', 'md:translate-y-10', 'opacity-0');
         modalInner.classList.add('translate-y-0', 'md:translate-y-0', 'opacity-100');
     }
@@ -316,22 +321,22 @@ function abrirLoginModal() {
 
 function cerrarLoginModal() {
     const modalInner = loginModal.querySelector('.transform');
-    if(modalInner) {
+    if (modalInner) {
         modalInner.classList.add('translate-y-full', 'md:translate-y-10', 'opacity-0');
         modalInner.classList.remove('translate-y-0', 'md:translate-y-0', 'opacity-100');
     }
     loginModal.classList.add('opacity-0');
-    
+
     setTimeout(() => {
         loginModal.classList.add('hidden');
         loginModal.classList.remove('flex');
-        if(loginError) loginError.classList.add('hidden');
-        if(formLogin) formLogin.reset();
+        if (loginError) loginError.classList.add('hidden');
+        if (formLogin) formLogin.reset();
     }, 500); // 500ms duration
 }
 
 // Configurar Eventos de Login
-if(btnLoginIcon) {
+if (btnLoginIcon) {
     btnLoginIcon.addEventListener('click', () => {
         if (sessionStorage.getItem('natura_auth') === 'true') {
             abrirEstudio();
@@ -343,27 +348,27 @@ if(btnLoginIcon) {
 
 function cerrarSesion() {
     sessionStorage.removeItem('natura_auth');
-    if(btnLogout) btnLogout.classList.add('hidden');
+    if (btnLogout) btnLogout.classList.add('hidden');
     const btnReset = document.getElementById('btn-reset-db');
-    if(btnReset) btnReset.classList.add('hidden');
+    if (btnReset) btnReset.classList.add('hidden');
     abrirGaleria();
-    window.scrollTo({top:0, behavior:'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-if(btnLogout) btnLogout.addEventListener('click', cerrarSesion);
-if(btnCerrarLogin) btnCerrarLogin.addEventListener('click', cerrarLoginModal);
+if (btnLogout) btnLogout.addEventListener('click', cerrarSesion);
+if (btnCerrarLogin) btnCerrarLogin.addEventListener('click', cerrarLoginModal);
 
-if(formLogin) {
+if (formLogin) {
     formLogin.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         const userRaw = document.getElementById('login-user').value.trim();
         const passRaw = document.getElementById('login-pass').value.trim();
-        
+
         // Sanitización estricta antes de validar
         const userSafe = sanitizar(userRaw);
         const passSafe = sanitizar(passRaw);
-        
+
         // Validación Robusta
         if (!userSafe || !passSafe) {
             loginError.textContent = "Por favor complete todos los campos.";
@@ -374,9 +379,9 @@ if(formLogin) {
         // Simulación segura de validación de credenciales (Admin)
         if (userSafe === 'admin' && passSafe === '123') {
             sessionStorage.setItem('natura_auth', 'true');
-            if(btnLogout) btnLogout.classList.remove('hidden');
+            if (btnLogout) btnLogout.classList.remove('hidden');
             const btnReset = document.getElementById('btn-reset-db');
-            if(btnReset) btnReset.classList.remove('hidden');
+            if (btnReset) btnReset.classList.remove('hidden');
             loginError.classList.add('hidden');
             cerrarLoginModal();
             abrirEstudio(); // Redirige al dashboard
@@ -392,7 +397,7 @@ const formNuevoProducto = document.getElementById('form-nuevo-producto');
 if (formNuevoProducto) {
     formNuevoProducto.addEventListener('submit', (e) => {
         e.preventDefault();
-        
+
         const nombre = sanitizar(document.getElementById('nuevo-nombre').value.trim());
         const precioOriginalRaw = document.getElementById('nuevo-precio-original').value;
         const precioOriginal = precioOriginalRaw ? parseInt(precioOriginalRaw) : null;
@@ -400,14 +405,14 @@ if (formNuevoProducto) {
         const categoria = sanitizar(document.getElementById('nuevo-categoria').value.trim());
         const imagenUrl = sanitizar(document.getElementById('nuevo-imagen').value.trim());
         const isNuevo = document.getElementById('nuevo-is-nuevo').checked;
-        
-        if(!nombre || !precio || !categoria || !imagenUrl) {
+
+        if (!nombre || !precio || !categoria || !imagenUrl) {
             alert('Por favor completa todos los campos obligatorios.');
             return;
         }
 
         const editId = document.getElementById('edit-id').value;
-        
+
         if (editId) {
             // Modo Edición
             const index = inventarioInicial.findIndex(p => p.id === editId);
@@ -417,12 +422,12 @@ if (formNuevoProducto) {
                     nombre, precioOriginal, precio, categoria, imagenUrl, isNuevo
                 };
                 localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
-                
+
                 const tit = document.getElementById('popup-exito-titulo');
                 const msj = document.getElementById('popup-exito-mensaje');
-                if(tit) tit.textContent = '¡Obra Actualizada!';
-                if(msj) msj.textContent = 'Los cambios se han guardado correctamente.';
-                
+                if (tit) tit.textContent = '¡Obra Actualizada!';
+                if (msj) msj.textContent = 'Los cambios se han guardado correctamente.';
+
                 mostrarPopupExito();
             }
         } else {
@@ -434,32 +439,32 @@ if (formNuevoProducto) {
                 precio,
                 categoria,
                 imagenUrl,
-                descripcion: '', 
+                descripcion: '',
                 isNuevo
             };
 
             inventarioInicial.unshift(nuevoProducto);
             localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
-            
+
             const tit = document.getElementById('popup-exito-titulo');
             const msj = document.getElementById('popup-exito-mensaje');
-            if(tit) tit.textContent = '¡Obra Publicada!';
-            if(msj) msj.textContent = 'El producto se ha agregado correctamente al catálogo.';
-            
+            if (tit) tit.textContent = '¡Obra Publicada!';
+            if (msj) msj.textContent = 'El producto se ha agregado correctamente al catálogo.';
+
             mostrarPopupExito();
         }
-        
+
         // Forzar vista completa para asegurar que los cambios se vean
         categoriaActiva = 'Todas';
         inputBusqueda.value = '';
-        
+
         // Refrescar UI completa
         renderizarCategorias();
-        filtrarProductos(); 
+        filtrarProductos();
         if (!document.getElementById('tab-gestionar').classList.contains('hidden')) {
             renderizarTablaProductos();
         }
-        
+
         cancelarEdicion(); // Resetear formulario
     });
 }
@@ -472,20 +477,20 @@ function cambiarTab(tab) {
     const tabGestionar = document.getElementById('tab-gestionar');
     const btnCrear = document.getElementById('btn-tab-crear');
     const btnGestionar = document.getElementById('btn-tab-gestionar');
-    
-    if(tab === 'crear') {
+
+    if (tab === 'crear') {
         tabCrear.classList.remove('hidden');
         tabGestionar.classList.add('hidden');
-        
+
         btnCrear.className = "flex-1 md:flex-none px-6 py-3 rounded-xl bg-white shadow-sm text-purple-600 font-bold text-sm transition-all";
         btnGestionar.className = "flex-1 md:flex-none px-6 py-3 rounded-xl text-gray-500 font-bold text-sm hover:text-purple-600 transition-all";
     } else {
         tabCrear.classList.add('hidden');
         tabGestionar.classList.remove('hidden');
-        
+
         btnGestionar.className = "flex-1 md:flex-none px-6 py-3 rounded-xl bg-white shadow-sm text-purple-600 font-bold text-sm transition-all";
         btnCrear.className = "flex-1 md:flex-none px-6 py-3 rounded-xl text-gray-500 font-bold text-sm hover:text-purple-600 transition-all";
-        
+
         renderizarTablaProductos();
     }
 }
@@ -493,14 +498,14 @@ function cambiarTab(tab) {
 // Renderizar Tabla
 function renderizarTablaProductos() {
     const tbody = document.getElementById('tabla-productos');
-    if(!tbody) return;
-    
+    if (!tbody) return;
+
     tbody.innerHTML = '';
-    
+
     inventarioInicial.forEach(producto => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-purple-50/30 transition-colors";
-        
+
         tr.innerHTML = `
             <td class="px-6 py-4">
                 <img src="${producto.imagenUrl}" alt="${producto.nombre}" class="w-12 h-12 rounded-lg object-cover shadow-sm">
@@ -528,8 +533,8 @@ function renderizarTablaProductos() {
 // Cargar para Edición
 function cargarProductoParaEdicion(id) {
     const producto = inventarioInicial.find(p => p.id === id);
-    if(!producto) return;
-    
+    if (!producto) return;
+
     document.getElementById('edit-id').value = producto.id;
     document.getElementById('nuevo-nombre').value = producto.nombre;
     document.getElementById('nuevo-precio-original').value = producto.precioOriginal || '';
@@ -537,23 +542,23 @@ function cargarProductoParaEdicion(id) {
     document.getElementById('nuevo-categoria').value = producto.categoria;
     document.getElementById('nuevo-imagen').value = producto.imagenUrl;
     document.getElementById('nuevo-is-nuevo').checked = producto.isNuevo;
-    
+
     const btnSubmit = document.getElementById('btn-submit-producto');
-    if(btnSubmit) btnSubmit.textContent = 'Actualizar Obra';
-    
+    if (btnSubmit) btnSubmit.textContent = 'Actualizar Obra';
+
     cambiarTab('crear');
-    window.scrollTo({top:0, behavior:'smooth'});
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Cancelar Edición
 function cancelarEdicion() {
     const form = document.getElementById('form-nuevo-producto');
-    if(form) form.reset();
+    if (form) form.reset();
     const editId = document.getElementById('edit-id');
-    if(editId) editId.value = '';
-    
+    if (editId) editId.value = '';
+
     const btnSubmit = document.getElementById('btn-submit-producto');
-    if(btnSubmit) btnSubmit.textContent = 'Publicar Obra';
+    if (btnSubmit) btnSubmit.textContent = 'Publicar Obra';
 }
 
 // Modal Eliminar
@@ -563,18 +568,18 @@ const modalEliminar = document.getElementById('modal-eliminar');
 function abrirModalEliminar(id) {
     productoAEliminarId = id;
     const producto = inventarioInicial.find(p => p.id === id);
-    if(producto) {
+    if (producto) {
         document.getElementById('texto-modal-eliminar').textContent = `¿Estás seguro de que deseas eliminar "${producto.nombre}"?`;
     }
-    
-    if(modalEliminar) {
+
+    if (modalEliminar) {
         modalEliminar.classList.remove('hidden');
         modalEliminar.classList.add('flex');
         void modalEliminar.offsetWidth;
         modalEliminar.classList.remove('opacity-0');
-        
+
         const modalInner = modalEliminar.querySelector('.transform');
-        if(modalInner) {
+        if (modalInner) {
             modalInner.classList.replace('translate-y-full', 'translate-y-0');
             modalInner.classList.replace('md:scale-95', 'md:scale-100');
         }
@@ -582,14 +587,14 @@ function abrirModalEliminar(id) {
 }
 
 function cerrarModalEliminar() {
-    if(!modalEliminar) return;
+    if (!modalEliminar) return;
     const modalInner = modalEliminar.querySelector('.transform');
-    if(modalInner) {
+    if (modalInner) {
         modalInner.classList.replace('translate-y-0', 'translate-y-full');
         modalInner.classList.replace('md:scale-100', 'md:scale-95');
     }
     modalEliminar.classList.add('opacity-0');
-    
+
     setTimeout(() => {
         modalEliminar.classList.add('hidden');
         modalEliminar.classList.remove('flex');
@@ -598,17 +603,17 @@ function cerrarModalEliminar() {
 }
 
 function confirmarEliminacion() {
-    if(!productoAEliminarId) return;
-    
+    if (!productoAEliminarId) return;
+
     const index = inventarioInicial.findIndex(p => p.id === productoAEliminarId);
-    if(index > -1) {
+    if (index > -1) {
         inventarioInicial.splice(index, 1);
         localStorage.setItem('natura_productos', JSON.stringify(inventarioInicial));
         renderizarCategorias();
         filtrarProductos();
         renderizarTablaProductos();
     }
-    
+
     cerrarModalEliminar();
 }
 
@@ -616,28 +621,28 @@ function confirmarEliminacion() {
 const popupExito = document.getElementById('popup-exito');
 
 function mostrarPopupExito() {
-    if(!popupExito) return;
+    if (!popupExito) return;
     popupExito.classList.remove('hidden');
     popupExito.classList.add('flex');
     void popupExito.offsetWidth; // Reflow
     popupExito.classList.remove('opacity-0');
-    
+
     const modalInner = popupExito.querySelector('.transform');
-    if(modalInner) {
+    if (modalInner) {
         modalInner.classList.replace('translate-y-full', 'translate-y-0');
         modalInner.classList.replace('md:scale-95', 'md:scale-100');
     }
 }
 
 function cerrarPopupExito() {
-    if(!popupExito) return;
+    if (!popupExito) return;
     const modalInner = popupExito.querySelector('.transform');
-    if(modalInner) {
+    if (modalInner) {
         modalInner.classList.replace('translate-y-0', 'translate-y-full');
         modalInner.classList.replace('md:scale-100', 'md:scale-95');
     }
     popupExito.classList.add('opacity-0');
-    
+
     setTimeout(() => {
         popupExito.classList.add('hidden');
         popupExito.classList.remove('flex');
@@ -648,28 +653,28 @@ function cerrarPopupExito() {
 const modalReset = document.getElementById('modal-reset-db');
 
 function abrirModalReset() {
-    if(!modalReset) return;
+    if (!modalReset) return;
     modalReset.classList.remove('hidden');
     modalReset.classList.add('flex');
     void modalReset.offsetWidth;
     modalReset.classList.remove('opacity-0');
-    
+
     const modalInner = modalReset.querySelector('.transform');
-    if(modalInner) {
+    if (modalInner) {
         modalInner.classList.replace('translate-y-full', 'translate-y-0');
         modalInner.classList.replace('md:scale-95', 'md:scale-100');
     }
 }
 
 function cerrarModalReset() {
-    if(!modalReset) return;
+    if (!modalReset) return;
     const modalInner = modalReset.querySelector('.transform');
-    if(modalInner) {
+    if (modalInner) {
         modalInner.classList.replace('translate-y-0', 'translate-y-full');
         modalInner.classList.replace('md:scale-100', 'md:scale-95');
     }
     modalReset.classList.add('opacity-0');
-    
+
     setTimeout(() => {
         modalReset.classList.add('hidden');
         modalReset.classList.remove('flex');
