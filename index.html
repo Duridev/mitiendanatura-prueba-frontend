@@ -57,7 +57,7 @@
 
             <!-- Buscador Artístico -->
             <div class="relative group">
-                <input type="text" placeholder="Encuentra tu esencia..." class="w-full bg-white/50 border border-purple-100 rounded-2xl py-3 px-6 pr-14 focus:outline-none focus:ring-2 focus:ring-orange-200 transition-all placeholder:italic text-gray-500">
+                <input type="text" id="input-busqueda" placeholder="Encuentra tu esencia..." class="w-full bg-white/50 border border-purple-100 rounded-2xl py-3 px-6 pr-14 focus:outline-none focus:ring-2 focus:ring-orange-200 transition-all placeholder:italic text-gray-500">
                 <button class="absolute right-2 top-2 bottom-2 px-5 rounded-xl bg-natura-orange text-white shadow-md hover:bg-orange-600 transition-all">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -78,7 +78,7 @@
             </div>
             
             <!-- Grilla de Productos -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
+            <div id="contenedor-galeria" class="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
                 
                 <!-- Tarjeta de Producto 1 -->
                 <article class="bg-white/60 backdrop-blur-sm rounded-[2.5rem] p-4 shadow-xl shadow-purple-900/5 border border-white hover:translate-y-[-8px] transition-all duration-500 group flex flex-col">
@@ -218,5 +218,6 @@
         </button>
     </nav>
 
+    <script src="js/main.js"></script>
 </body>
 </html>

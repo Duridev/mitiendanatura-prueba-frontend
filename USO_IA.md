@@ -14,5 +14,18 @@ Dashboard de Administración: Una sección que simule el área privada, con un f
 
 Entrégame únicamente la estructura HTML y las clases de Tailwind listas para usar. La lógica de JavaScript la construiré yo aparte.
 
-## Primero prompt para Antigravity
+## Primero prompt para Gemini Pro
 
+Prompt: "Genera una función en JavaScript que renderice una lista de productos Natura evitando el uso de innerHTML para prevenir ataques XSS, utilizando document.createElement."
+
+Mejora: El código resultante separa la lógica de filtrado de la de renderizado, permitiendo que la búsqueda sea fluida y segura.
+
+## Tercer Prompt para Antigravity
+
+Asegúrate de los IDs: En tu HTML, el contenedor donde van las tarjetas debe tener id="contenedor-galeria" y el buscador id="input-busqueda".
+
+Referencia en HTML: No olvides poner <script src="js/main.js"></script> al final de tu archivo HTML (antes del cierre de </body>).
+
+Revisa el archivo main.js que se encuentra en la carpeta js. Asegúrate de que tenga una correcta implementación de la lógica de filtrado y renderizado. Debe contar con un arreglo que contenga la información de al menos 4 productos. Con su respectivo renderizado y la capacidad de filtrar por nombre o categoría. No olvides de utilizar las mejores prácticas de desarrollo Front-End. Que tenga una correcta implementación con el index.html.
+
+## Cuarto prompt para Antigravity
