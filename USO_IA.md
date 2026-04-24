@@ -39,9 +39,15 @@ También mejora el aspecto del logo de whatsapp, haciendo que sea más grande, t
 Que las imágenes de los productos, al momento de acercarse con el hover, la imagen mantenga su tamaño ocultando el desborde.
 Estiliza el botn de Consultar y que tenga un tamaño adecuado para la tarjeta.
 
+---
+
 Entre la sección de Los más deseados y las tarjetas, añade capsulas con todos las categorías de productos que hay disponibles. Si se añaden más categorías, estas de deben añadir de forma automática, asegurándote de que el diseño se mantenga correcto. Que estas tengan un borde y letra del mismo color pero sin un color de fondo. Y que el la capsula que esté seleccionada tenga un color de fondo. asefgurate de que la letra tenga buen contraste. Estas capsulas deben estar centradas y tener un tamaño adecuado para la pantalla.
 
+---
+
 Tambien haz que las tarjetas esten en solo 3 columnas en computadores grandes, y en móviles solo una columna. Que estas esten espaciadas correctamente. 
+
+---
 
 no utilices todo el ancho de la pantalla, deja un margen de espacio a los lados de los productos. Para el color de fondo de las capsulas de las categorías, utiliza tonalidades moradas con un gradiente suave. Que se vea elegante. con menos padding vertical en las cápsulas.
 
@@ -53,3 +59,7 @@ Que la imagen de natura al clickearla te lleve al inicio en la parte de arriba d
 
 Para finalizar el login, que tenga una aparición desde abajo, con una transición suave. 
 Tras el inicio exitoso de sesión, me lleve al dashboard. Recuerda bloquear la página del dashboard si no se ha utilizado las credenciales correctas para el inicio de sesión, utilizando local storage o session storage según corresponda. Además el formulario que se encuentra en el dashboard, debe tener todos los campos necesarios para agregar un producto, y el botón de "Guardar" debe guardar el producto en el catálogo. En "coleccion", que se pueda escribir una nueva, o elegir unacategoría existente. Si es una nueva, que se guarde en el arreglo de categorías. El botón de "Guardar", debe guardar el producto en el arreglo de productos. 
+
+---
+
+una vez logueado, debería poder ver la página principal presionando el logo de natura, y si vuelvo a presionar el login, me debería llevar al dashboard. Una vez iniciada la sesión, me debería aparecer un botón de cerrar sesión, que al cerrarla me lleve a la página principal y me borre el local storage. este botón aparecerá en la parte superior derecha al lado del login.

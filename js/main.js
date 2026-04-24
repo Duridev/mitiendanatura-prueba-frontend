@@ -56,6 +56,7 @@ const inputBusqueda = document.getElementById('input-busqueda');
 
 // Referencias Login y Navegación
 const btnLoginIcon = document.getElementById('btn-login-icon');
+const btnLogout = document.getElementById('btn-logout');
 const loginModal = document.getElementById('login-modal');
 const btnCerrarLogin = document.getElementById('btn-cerrar-login');
 const formLogin = document.getElementById('form-login');
@@ -208,6 +209,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Escuchar la barra de búsqueda
     inputBusqueda.addEventListener('input', filtrarProductos);
+    
+    // Verificar sesión activa
+    if (sessionStorage.getItem('natura_auth') === 'true') {
+        if(btnLogout) btnLogout.classList.remove('hidden');
+    }
 });
 
 // 7. FUNCIONES DE SEGURIDAD Y NAVEGACIÓN
@@ -267,7 +273,24 @@ function cerrarLoginModal() {
 }
 
 // Configurar Eventos de Login
-if(btnLoginIcon) btnLoginIcon.addEventListener('click', abrirLoginModal);
+if(btnLoginIcon) {
+    btnLoginIcon.addEventListener('click', () => {
+        if (sessionStorage.getItem('natura_auth') === 'true') {
+            abrirEstudio();
+        } else {
+            abrirLoginModal();
+        }
+    });
+}
+
+function cerrarSesion() {
+    sessionStorage.removeItem('natura_auth');
+    if(btnLogout) btnLogout.classList.add('hidden');
+    abrirGaleria();
+    window.scrollTo({top:0, behavior:'smooth'});
+}
+
+if(btnLogout) btnLogout.addEventListener('click', cerrarSesion);
 if(btnCerrarLogin) btnCerrarLogin.addEventListener('click', cerrarLoginModal);
 
 if(formLogin) {
@@ -291,6 +314,7 @@ if(formLogin) {
         // Simulación segura de validación de credenciales (Admin)
         if (userSafe === 'admin' && passSafe === '123') {
             sessionStorage.setItem('natura_auth', 'true');
+            if(btnLogout) btnLogout.classList.remove('hidden');
             loginError.classList.add('hidden');
             cerrarLoginModal();
             abrirEstudio(); // Redirige al dashboard
