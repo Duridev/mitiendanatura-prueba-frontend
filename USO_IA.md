@@ -64,7 +64,7 @@ Tras el inicio exitoso de sesión, me lleve al dashboard. Recuerda bloquear la p
 
 una vez logueado, debería poder ver la página principal presionando el logo de natura, y si vuelvo a presionar el login, me debería llevar al dashboard. Una vez iniciada la sesión, me debería aparecer un botón de cerrar sesión, que al cerrarla me lleve a la página principal y me borre el local storage. este botón aparecerá en la parte superior derecha al lado del login.
 
-## Séptimo Prompt para Antigravity - Dashboard -. 
+## Séptimo, Prompts para Antigravity - Dashboard -. 
 
 Al momento de crear un producto, cambia el alert por un pop up de información que diga: "Producto agregado correctamente" y que tenga el mismo estilo que las tarjetas. Además que el pop up tenga un icono de check.
 Hice la prueba y no está cargando los productos en la grilla. Haz que los productos se muestren en la grilla, y la nueva categoría también. y que al cerrar sesión se borre el local storage de la sesión, pero que los productos creados se mantengan en el arreglo de productos.
@@ -118,3 +118,13 @@ No puedo eliminar los productos creados, ni editarlos. Presiono los botones y no
 ---
 
 Ahora haz un tercer botón en la parte superior derecha que diga "Eliminar Local Storage", que al presionarlo me borre todo el local storage y me recargue la página, eliminando todos los cambios y restaurando solo los 4 objetos quemados. y al hacerlo, en el lugar de "Colección" aparezca un pop up con un check y diga "Catálogo restaurado exitosamente"
+
+--
+
+Que el botón aparezca solo cuando el usuario esté logueado y primero pregunte si estoy seguro de querer eliminar el local storage, poniendo como advertencia que se eliminarán todos los productos agregados y se restaurará el catálogo inicial.
+
+--  
+
+Crea al dlado delmprecio, un rectangulo naranjo donde salga el porcentaje del descuento en cada uno de los productos que tengan descuento. Si no tienen descuento, que no aparezca nada.
+
+que el rectangulo sea un poco más grande, que el fondo sea naranja natura y los números blancos.

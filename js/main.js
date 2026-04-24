@@ -135,6 +135,13 @@ function renderizarCatalogo(lista) {
         const precioOriginalFormateado = producto.precioOriginal ? producto.precioOriginal.toLocaleString('es-CL') : '';
         const htmlPrecioOriginal = producto.precioOriginal ? `<p class="text-sm text-gray-500 line-through font-semibold leading-none mb-1">$${precioOriginalFormateado}</p>` : '';
 
+        // Calcular porcentaje de descuento
+        let htmlDescuento = '';
+        if (producto.precioOriginal && producto.precioOriginal > producto.precio) {
+            const descuento = Math.round((1 - (producto.precio / producto.precioOriginal)) * 100);
+            htmlDescuento = `<span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-lg mb-1 shadow-sm">-${descuento}%</span>`;
+        }
+
         // Etiqueta de Novedad condicional
         const tagNovedad = producto.isNuevo 
             ? `<span class="absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Novedad</span>` 
@@ -158,6 +165,7 @@ function renderizarCatalogo(lista) {
                                 ${htmlPrecioOriginal}
                                 <p class="text-2xl font-bold text-gray-900 tracking-tighter">$${precioFormateado}</p>
                             </div>
+                            ${htmlDescuento}
                         </div>
                         
                         <a href="${hrefWa}" target="_blank" class="w-full py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl font-bold shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
@@ -247,6 +255,22 @@ document.addEventListener('DOMContentLoaded', () => {
     // Verificar sesión activa
     if (sessionStorage.getItem('natura_auth') === 'true') {
         if(btnLogout) btnLogout.classList.remove('hidden');
+        const btnReset = document.getElementById('btn-reset-db');
+        if(btnReset) btnReset.classList.remove('hidden');
+    }
+    
+    // Verificar si venimos de un reseteo de base de datos
+    if (sessionStorage.getItem('natura_reset') === 'true') {
+        sessionStorage.removeItem('natura_reset');
+        
+        const tit = document.getElementById('popup-exito-titulo');
+        const msj = document.getElementById('popup-exito-mensaje');
+        if(tit) tit.textContent = '¡Éxito!';
+        if(msj) msj.textContent = 'Catálogo restaurado exitosamente';
+        
+        setTimeout(() => {
+            mostrarPopupExito();
+        }, 500); // Pequeño delay para asegurar que el DOM esté listo y haya animación
     }
 });
 
@@ -320,6 +344,8 @@ if(btnLoginIcon) {
 function cerrarSesion() {
     sessionStorage.removeItem('natura_auth');
     if(btnLogout) btnLogout.classList.add('hidden');
+    const btnReset = document.getElementById('btn-reset-db');
+    if(btnReset) btnReset.classList.add('hidden');
     abrirGaleria();
     window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -349,6 +375,8 @@ if(formLogin) {
         if (userSafe === 'admin' && passSafe === '123') {
             sessionStorage.setItem('natura_auth', 'true');
             if(btnLogout) btnLogout.classList.remove('hidden');
+            const btnReset = document.getElementById('btn-reset-db');
+            if(btnReset) btnReset.classList.remove('hidden');
             loginError.classList.add('hidden');
             cerrarLoginModal();
             abrirEstudio(); // Redirige al dashboard
@@ -614,4 +642,42 @@ function cerrarPopupExito() {
         popupExito.classList.add('hidden');
         popupExito.classList.remove('flex');
     }, 500);
+}
+
+// Restaurar Catálogo (Reset DB)
+const modalReset = document.getElementById('modal-reset-db');
+
+function abrirModalReset() {
+    if(!modalReset) return;
+    modalReset.classList.remove('hidden');
+    modalReset.classList.add('flex');
+    void modalReset.offsetWidth;
+    modalReset.classList.remove('opacity-0');
+    
+    const modalInner = modalReset.querySelector('.transform');
+    if(modalInner) {
+        modalInner.classList.replace('translate-y-full', 'translate-y-0');
+        modalInner.classList.replace('md:scale-95', 'md:scale-100');
+    }
+}
+
+function cerrarModalReset() {
+    if(!modalReset) return;
+    const modalInner = modalReset.querySelector('.transform');
+    if(modalInner) {
+        modalInner.classList.replace('translate-y-0', 'translate-y-full');
+        modalInner.classList.replace('md:scale-100', 'md:scale-95');
+    }
+    modalReset.classList.add('opacity-0');
+    
+    setTimeout(() => {
+        modalReset.classList.add('hidden');
+        modalReset.classList.remove('flex');
+    }, 500);
+}
+
+function confirmarRestauracion() {
+    localStorage.removeItem('natura_productos');
+    sessionStorage.setItem('natura_reset', 'true');
+    window.location.reload();
 }
