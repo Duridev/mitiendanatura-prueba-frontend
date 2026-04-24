@@ -28,4 +28,19 @@ Referencia en HTML: No olvides poner <script src="js/main.js"></script> al final
 
 Revisa el archivo main.js que se encuentra en la carpeta js. Asegúrate de que tenga una correcta implementación de la lógica de filtrado y renderizado. Debe contar con un arreglo que contenga la información de al menos 4 productos. Con su respectivo renderizado y la capacidad de filtrar por nombre o categoría. No olvides de utilizar las mejores prácticas de desarrollo Front-End. Que tenga una correcta implementación con el index.html.
 
-## Cuarto prompt para Antigravity
+## Cuarto prompt para Antigravity.
+
+Cambia el logo actual junto con la palabra "natura" por el logo de natura que se encuentra en la carpeta "img". Asegúrate de que el logo se muestre correctamente en todos los tamaños de pantalla. 
+
+También añade sobre el precio, un valor más pequeño y con un gris, tachado, tanto en el index como en los objetos del main.js.
+
+También mejora el aspecto del logo de whatsapp, haciendo que sea más grande, tanto en los botones de Consultar, como en el fijo que acompña la página.
+
+Que las imágenes de los productos, al momento de acercarse con el hover, la imagen mantenga su tamaño ocultando el desborde.
+Estiliza el botn de Consultar y que tenga un tamaño adecuado para la tarjeta.
+
+Entre la sección de Los más deseados y las tarjetas, añade capsulas con todos las categorías de productos que hay disponibles. Si se añaden más categorías, estas de deben añadir de forma automática, asegurándote de que el diseño se mantenga correcto. Que estas tengan un borde y letra del mismo color pero sin un color de fondo. Y que el la capsula que esté seleccionada tenga un color de fondo. asefgurate de que la letra tenga buen contraste. Estas capsulas deben estar centradas y tener un tamaño adecuado para la pantalla.
+
+Tambien haz que las tarjetas esten en solo 3 columnas en computadores grandes, y en móviles solo una columna. Que estas esten espaciadas correctamente. 
+
+no utilices todo el ancho de la pantalla, deja un margen de espacio a los lados de los productos. Para el color de fondo de las capsulas de las categorías, utiliza tonalidades moradas con un gradiente suave. Que se vea elegante. con menos padding vertical en las cápsulas.

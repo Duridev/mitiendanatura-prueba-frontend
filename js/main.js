@@ -10,8 +10,9 @@ const inventarioInicial = [
     {
         id: "nat-001",
         nombre: "Pulpa Hidratante para Manos Castaña",
+        precioOriginal: 12500,
         precio: 9500,
-        categoria: "Cuerpo y Baño",
+        categoria: "Manos",
         imagenUrl: "https://production.na01.natura.com/dw/image/v2/BFKR_PRD/on/demandware.static/-/Sites-natura-cl-storefront-catalog/default/dwd9518036/producto-joia/mobile/70983.jpg",
         descripcion: "Nutrición profunda para la piel de tus manos.",
         isNuevo: true
@@ -19,6 +20,7 @@ const inventarioInicial = [
     {
         id: "nat-002",
         nombre: "Kaiak clásico eau de toilette masculino",
+        precioOriginal: 45990,
         precio: 34990,
         categoria: "Perfumería",
         imagenUrl: "https://production.na01.natura.com/dw/image/v2/BFKR_PRD/on/demandware.static/-/Sites-natura-cl-storefront-catalog/default/dw10fc847f/produtos/NATCHL-111171_2.jpg",
@@ -28,6 +30,7 @@ const inventarioInicial = [
     {
         id: "nat-003",
         nombre: "Labial Líquido Mate Intransferible",
+        precioOriginal: 15990,
         precio: 11990,
         categoria: "Maquillaje",
         imagenUrl: "https://production.na01.natura.com/dw/image/v2/BFKR_PRD/on/demandware.static/-/Sites-natura-cl-storefront-catalog/default/dwda8bfb3c/produtos/NATCHL-140023_1.jpg",
@@ -37,6 +40,7 @@ const inventarioInicial = [
     {
         id: "nat-004",
         nombre: "Gel crema antiseñales Renovación y prevención Chronos 30+ noche",
+        precioOriginal: 42990,
         precio: 32990,
         categoria: "Rostro",
         imagenUrl: "https://production.na01.natura.com/dw/image/v2/BFKR_PRD/on/demandware.static/-/Sites-natura-cl-storefront-catalog/default/dw13d5f680/produtos/NATCHL-134593_2.jpg",
@@ -47,7 +51,10 @@ const inventarioInicial = [
 
 // 2. REFERENCIAS AL DOM
 const contenedorGaleria = document.getElementById('contenedor-galeria');
+const contenedorCategorias = document.getElementById('contenedor-categorias');
 const inputBusqueda = document.getElementById('input-busqueda');
+
+let categoriaActiva = 'Todas';
 
 // 3. FUNCIÓN DE RENDERIZADO (Cumple Criterio 1 y 3 de la Rúbrica)
 function renderizarCatalogo(lista) {
@@ -79,6 +86,9 @@ function renderizarCatalogo(lista) {
         const mensajeWa = `Hola, me interesa el producto: ${producto.nombre} ($${producto.precio})`;
         const hrefWa = `https://wa.me/56912345678?text=${encodeURIComponent(mensajeWa)}`;
 
+        const precioOriginalFormateado = producto.precioOriginal ? producto.precioOriginal.toLocaleString('es-CL') : '';
+        const htmlPrecioOriginal = producto.precioOriginal ? `<p class="text-sm text-gray-500 line-through font-semibold leading-none mb-1">$${precioOriginalFormateado}</p>` : '';
+
         // Etiqueta de Novedad condicional
         const tagNovedad = producto.isNuevo 
             ? `<span class="absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Novedad</span>` 
@@ -87,9 +97,9 @@ function renderizarCatalogo(lista) {
         // Template de la tarjeta copiando el diseño original
         const cardHTML = `
             <article class="bg-white/60 backdrop-blur-sm rounded-[2.5rem] p-4 shadow-xl shadow-purple-900/5 border border-white hover:translate-y-[-8px] transition-all duration-500 group flex flex-col">
-                <div class="relative aspect-[4/5] rounded-[2rem] bg-gradient-to-b from-purple-50 to-white overflow-hidden flex items-center justify-center mb-6">
+                <div class="relative aspect-[4/5] rounded-[2rem] bg-gradient-to-b from-purple-50 to-white overflow-hidden isolate flex items-center justify-center mb-6">
                     ${tagNovedad}
-                    <img src="${producto.imagenUrl}" alt="${nombreSeguro}" class="max-h-full w-full object-cover rounded-[2rem] drop-shadow-2xl group-hover:scale-110 transition-transform duration-700">
+                    <img src="${producto.imagenUrl}" alt="${nombreSeguro}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                 </div>
                 
                 <div class="px-2 flex flex-col flex-grow">
@@ -98,13 +108,14 @@ function renderizarCatalogo(lista) {
                     
                     <div class="mt-auto">
                         <div class="flex items-end gap-2 mb-6">
-                            <div>
+                            <div class="flex flex-col">
+                                ${htmlPrecioOriginal}
                                 <p class="text-2xl font-bold text-gray-900 tracking-tighter">$${precioFormateado}</p>
                             </div>
                         </div>
                         
-                        <a href="${hrefWa}" target="_blank" class="w-full py-4 bg-white border-2 border-green-500/20 rounded-2xl text-green-700 font-bold hover:bg-green-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-3 group/btn">
-                            <svg class="w-6 h-6 text-green-500 group-hover/btn:text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg>
+                        <a href="${hrefWa}" target="_blank" class="w-full py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl font-bold shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
+                            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg>
                             <span class="uppercase tracking-widest text-xs">Consultar</span>
                         </a>
                     </div>
@@ -116,23 +127,59 @@ function renderizarCatalogo(lista) {
     });
 }
 
-// 4. LÓGICA DE BÚSQUEDA (Criterio 2: Manejo de Arreglos)
+// 4. LÓGICA DE CATEGORÍAS
+function renderizarCategorias() {
+    if (!contenedorCategorias) return;
+    
+    const categoriasUnicas = ['Todas', ...new Set(inventarioInicial.map(p => p.categoria))];
+    contenedorCategorias.innerHTML = '';
+    
+    categoriasUnicas.forEach(categoria => {
+        const btn = document.createElement('button');
+        btn.textContent = categoria;
+        
+        // Clases base (menos padding vertical)
+        let clases = "px-6 py-1.5 rounded-full font-bold text-sm transition-all duration-300 shadow-sm ";
+        
+        if (categoria === categoriaActiva) {
+            clases += "bg-gradient-to-r from-purple-500 to-purple-600 text-white border-2 border-transparent shadow-md";
+        } else {
+            clases += "bg-transparent text-purple-600 border-2 border-purple-300 hover:border-purple-400 hover:shadow-md hover:-translate-y-0.5";
+        }
+        
+        btn.className = clases;
+        
+        btn.addEventListener('click', () => {
+            categoriaActiva = categoria;
+            renderizarCategorias(); // Para actualizar los colores
+            filtrarProductos();
+        });
+        
+        contenedorCategorias.appendChild(btn);
+    });
+}
+
+// 5. LÓGICA DE BÚSQUEDA Y FILTRADO (Criterio 2: Manejo de Arreglos)
 function filtrarProductos() {
     const terminoBusqueda = inputBusqueda.value.toLowerCase();
     
     const productosFiltrados = inventarioInicial.filter(producto => {
-        return (
+        const coincideBusqueda = 
             producto.nombre.toLowerCase().includes(terminoBusqueda) ||
-            producto.categoria.toLowerCase().includes(terminoBusqueda)
-        );
+            producto.categoria.toLowerCase().includes(terminoBusqueda);
+            
+        const coincideCategoria = categoriaActiva === 'Todas' || producto.categoria === categoriaActiva;
+        
+        return coincideBusqueda && coincideCategoria;
     });
 
     renderizarCatalogo(productosFiltrados);
 }
 
-// 5. INICIALIZACIÓN Y EVENTOS
+// 6. INICIALIZACIÓN Y EVENTOS
 document.addEventListener('DOMContentLoaded', () => {
-    // Primera carga del catálogo
+    // Primera carga del catálogo y categorías
+    renderizarCategorias();
     renderizarCatalogo(inventarioInicial);
 
     // Escuchar la barra de búsqueda
