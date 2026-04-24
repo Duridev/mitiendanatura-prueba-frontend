@@ -54,6 +54,17 @@ const contenedorGaleria = document.getElementById('contenedor-galeria');
 const contenedorCategorias = document.getElementById('contenedor-categorias');
 const inputBusqueda = document.getElementById('input-busqueda');
 
+// Referencias Login y Navegación
+const btnLoginIcon = document.getElementById('btn-login-icon');
+const loginModal = document.getElementById('login-modal');
+const btnCerrarLogin = document.getElementById('btn-cerrar-login');
+const formLogin = document.getElementById('form-login');
+const loginError = document.getElementById('login-error');
+const catalogoPublico = document.getElementById('catalogo-publico');
+const dashboardAdmin = document.getElementById('dashboard-admin');
+const indicadorGaleria = document.getElementById('indicador-galeria');
+const indicadorEstudio = document.getElementById('indicador-estudio');
+
 let categoriaActiva = 'Todas';
 
 // 3. FUNCIÓN DE RENDERIZADO (Cumple Criterio 1 y 3 de la Rúbrica)
@@ -134,6 +145,19 @@ function renderizarCategorias() {
     const categoriasUnicas = ['Todas', ...new Set(inventarioInicial.map(p => p.categoria))];
     contenedorCategorias.innerHTML = '';
     
+    // Actualizar datalist del formulario de agregar producto
+    const dataList = document.getElementById('lista-colecciones');
+    if (dataList) {
+        dataList.innerHTML = '';
+        categoriasUnicas.forEach(cat => {
+            if (cat !== 'Todas') {
+                const option = document.createElement('option');
+                option.value = cat;
+                dataList.appendChild(option);
+            }
+        });
+    }
+    
     categoriasUnicas.forEach(categoria => {
         const btn = document.createElement('button');
         btn.textContent = categoria;
@@ -185,3 +209,135 @@ document.addEventListener('DOMContentLoaded', () => {
     // Escuchar la barra de búsqueda
     inputBusqueda.addEventListener('input', filtrarProductos);
 });
+
+// 7. FUNCIONES DE SEGURIDAD Y NAVEGACIÓN
+function sanitizar(input) {
+    // Prevención de XSS (Cross-Site Scripting) básica
+    const div = document.createElement('div');
+    div.textContent = input;
+    return div.innerHTML;
+}
+
+function abrirGaleria() {
+    catalogoPublico.classList.remove('hidden');
+    dashboardAdmin.classList.add('hidden');
+    if(indicadorGaleria) indicadorGaleria.classList.replace('scale-x-0', 'scale-x-75');
+    if(indicadorEstudio) indicadorEstudio.classList.replace('scale-x-75', 'scale-x-0');
+}
+
+function abrirEstudio() {
+    const isAuth = sessionStorage.getItem('natura_auth');
+    if (isAuth === 'true') {
+        catalogoPublico.classList.add('hidden');
+        dashboardAdmin.classList.remove('hidden');
+        if(indicadorGaleria) indicadorGaleria.classList.replace('scale-x-75', 'scale-x-0');
+        if(indicadorEstudio) indicadorEstudio.classList.replace('scale-x-0', 'scale-x-75');
+    } else {
+        abrirLoginModal();
+    }
+}
+
+function abrirLoginModal() {
+    loginModal.classList.remove('hidden');
+    loginModal.classList.add('flex');
+    void loginModal.offsetWidth; // Forzar reflow
+    loginModal.classList.remove('opacity-0');
+    
+    const modalInner = loginModal.querySelector('.transform');
+    if(modalInner) {
+        modalInner.classList.remove('translate-y-full', 'md:translate-y-10', 'opacity-0');
+        modalInner.classList.add('translate-y-0', 'md:translate-y-0', 'opacity-100');
+    }
+}
+
+function cerrarLoginModal() {
+    const modalInner = loginModal.querySelector('.transform');
+    if(modalInner) {
+        modalInner.classList.add('translate-y-full', 'md:translate-y-10', 'opacity-0');
+        modalInner.classList.remove('translate-y-0', 'md:translate-y-0', 'opacity-100');
+    }
+    loginModal.classList.add('opacity-0');
+    
+    setTimeout(() => {
+        loginModal.classList.add('hidden');
+        loginModal.classList.remove('flex');
+        if(loginError) loginError.classList.add('hidden');
+        if(formLogin) formLogin.reset();
+    }, 500); // 500ms duration
+}
+
+// Configurar Eventos de Login
+if(btnLoginIcon) btnLoginIcon.addEventListener('click', abrirLoginModal);
+if(btnCerrarLogin) btnCerrarLogin.addEventListener('click', cerrarLoginModal);
+
+if(formLogin) {
+    formLogin.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const userRaw = document.getElementById('login-user').value.trim();
+        const passRaw = document.getElementById('login-pass').value.trim();
+        
+        // Sanitización estricta antes de validar
+        const userSafe = sanitizar(userRaw);
+        const passSafe = sanitizar(passRaw);
+        
+        // Validación Robusta
+        if (!userSafe || !passSafe) {
+            loginError.textContent = "Por favor complete todos los campos.";
+            loginError.classList.remove('hidden');
+            return;
+        }
+
+        // Simulación segura de validación de credenciales (Admin)
+        if (userSafe === 'admin' && passSafe === '123') {
+            sessionStorage.setItem('natura_auth', 'true');
+            loginError.classList.add('hidden');
+            cerrarLoginModal();
+            abrirEstudio(); // Redirige al dashboard
+        } else {
+            loginError.textContent = "Credenciales incorrectas. Intente nuevamente.";
+            loginError.classList.remove('hidden');
+        }
+    });
+}
+
+// Configurar Formulario del Dashboard
+const formNuevoProducto = document.getElementById('form-nuevo-producto');
+if (formNuevoProducto) {
+    formNuevoProducto.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const nombre = sanitizar(document.getElementById('nuevo-nombre').value.trim());
+        const precioOriginalRaw = document.getElementById('nuevo-precio-original').value;
+        const precioOriginal = precioOriginalRaw ? parseInt(precioOriginalRaw) : null;
+        const precio = parseInt(document.getElementById('nuevo-precio').value);
+        const categoria = sanitizar(document.getElementById('nuevo-categoria').value.trim());
+        const imagenUrl = sanitizar(document.getElementById('nuevo-imagen').value.trim());
+        const isNuevo = document.getElementById('nuevo-is-nuevo').checked;
+        
+        if(!nombre || !precio || !categoria || !imagenUrl) {
+            alert('Por favor completa todos los campos obligatorios.');
+            return;
+        }
+
+        const nuevoProducto = {
+            nombre,
+            precioOriginal,
+            precio,
+            categoria,
+            imagenUrl,
+            descripcion: '', 
+            isNuevo
+        };
+
+        // Guardar en el catálogo principal (al principio)
+        inventarioInicial.unshift(nuevoProducto);
+        
+        // Refrescar UI completa
+        renderizarCategorias();
+        filtrarProductos(); 
+        
+        alert(`¡Éxito! El producto "${nombre}" ha sido publicado en el catálogo.`);
+        formNuevoProducto.reset();
+    });
+}

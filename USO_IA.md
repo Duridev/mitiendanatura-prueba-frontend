@@ -28,7 +28,7 @@ Referencia en HTML: No olvides poner <script src="js/main.js"></script> al final
 
 Revisa el archivo main.js que se encuentra en la carpeta js. Asegúrate de que tenga una correcta implementación de la lógica de filtrado y renderizado. Debe contar con un arreglo que contenga la información de al menos 4 productos. Con su respectivo renderizado y la capacidad de filtrar por nombre o categoría. No olvides de utilizar las mejores prácticas de desarrollo Front-End. Que tenga una correcta implementación con el index.html.
 
-## Cuarto prompt para Antigravity.
+## Cuarto prompt para Antigravity - Misceláneos -.
 
 Cambia el logo actual junto con la palabra "natura" por el logo de natura que se encuentra en la carpeta "img". Asegúrate de que el logo se muestre correctamente en todos los tamaños de pantalla. 
 
@@ -44,3 +44,12 @@ Entre la sección de Los más deseados y las tarjetas, añade capsulas con todos
 Tambien haz que las tarjetas esten en solo 3 columnas en computadores grandes, y en móviles solo una columna. Que estas esten espaciadas correctamente. 
 
 no utilices todo el ancho de la pantalla, deja un margen de espacio a los lados de los productos. Para el color de fondo de las capsulas de las categorías, utiliza tonalidades moradas con un gradiente suave. Que se vea elegante. con menos padding vertical en las cápsulas.
+
+## Quinto prompt para Antigravity - Login -.
+
+Que la imagen de natura al clickearla te lleve al inicio en la parte de arriba de la página, y que el icono de login me despliegue un pop  up, donde deba ingresar el nombre y la contraseña, el placeholder del nombre diga: 'Escriba "admin"', y en la parte de la contraseña diga 'Escriba "123"'. Y un botón de ingresar que tenga un gradiante naranjo con morado, como el que tiene la línea bajo el título "Los más deseados" Todo esto validado por JS, que debe tener un inicio de sesión con las credenciales por defecto, el login siempre garantizando buenas prácticas de seguridad (prevención de XSS, sanitización, validación robusta).
+
+## Sexto prompt para Antigravity - Dashboard -.
+
+Para finalizar el login, que tenga una aparición desde abajo, con una transición suave. 
+Tras el inicio exitoso de sesión, me lleve al dashboard. Recuerda bloquear la página del dashboard si no se ha utilizado las credenciales correctas para el inicio de sesión, utilizando local storage o session storage según corresponda. Además el formulario que se encuentra en el dashboard, debe tener todos los campos necesarios para agregar un producto, y el botón de "Guardar" debe guardar el producto en el catálogo. En "coleccion", que se pueda escribir una nueva, o elegir unacategoría existente. Si es una nueva, que se guarde en el arreglo de categorías. El botón de "Guardar", debe guardar el producto en el arreglo de productos. 
