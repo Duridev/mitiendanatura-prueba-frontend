@@ -114,75 +114,69 @@ function renderizarCatalogo(lista) {
         return;
     }
 
-    // Función de saneamiento para evitar vulnerabilidades XSS
-    const escapeHTML = (str) => {
-        if (!str) return "";
-        return String(str).replace(/[&<>'"]/g,
-            tag => ({
-                '&': '&amp;',
-                '<': '&lt;',
-                '>': '&gt;',
-                "'": '&#39;',
-                '"': '&quot;'
-            }[tag] || tag)
-        );
+    // Función auxiliar para crear elementos
+    const crear = (tag, clases, texto) => {
+        const el = document.createElement(tag);
+        if (clases) el.className = clases;
+        if (texto) el.textContent = texto;
+        return el;
     };
 
     lista.forEach(producto => {
-        const nombreSeguro = escapeHTML(producto.nombre);
-        const categoriaSegura = escapeHTML(producto.categoria);
+        // Validación básica de URL segura para prevenir javascript: en href/src
+        const isUrlSegura = /^(https?:\/\/)/i.test(producto.imagenUrl);
+        const imgUrl = isUrlSegura ? producto.imagenUrl : 'https://placehold.co/400x500?text=Error';
+
         const precioFormateado = producto.precio.toLocaleString('es-CL');
-        
-        // WhatsApp Dinámico y Seguro
         const mensajeWa = `Hola Amanda, me interesa el producto ${producto.nombre} que está a un valor de $${precioFormateado}. ¿Aún te queda stock?`;
         const hrefWa = `https://wa.me/${WHATSAPP_PRODUCTO}?text=${encodeURIComponent(mensajeWa)}`;
 
-        const precioOriginalFormateado = producto.precioOriginal ? producto.precioOriginal.toLocaleString('es-CL') : '';
-        const htmlPrecioOriginal = producto.precioOriginal ? `<p class="text-sm text-gray-500 line-through font-semibold leading-none mb-1">$${precioOriginalFormateado}</p>` : '';
+        const article = crear('article', 'bg-white/60 backdrop-blur-sm rounded-[2.5rem] p-4 shadow-xl shadow-purple-900/5 border border-white hover:translate-y-[-8px] transition-all duration-500 group flex flex-col');
 
-        // Calcular porcentaje de descuento
-        let htmlDescuento = '';
+        // Contenedor de Imagen
+        const divImg = crear('div', 'relative aspect-[4/5] rounded-[2rem] bg-gradient-to-b from-purple-50 to-white overflow-hidden isolate flex items-center justify-center mb-6');
+        if (producto.isNuevo) {
+            divImg.appendChild(crear('span', 'absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg', 'Novedad'));
+        }
+        const img = crear('img', 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-110');
+        img.src = imgUrl;
+        img.alt = producto.nombre;
+        divImg.appendChild(img);
+        article.appendChild(divImg);
+
+        // Contenido (Textos)
+        const divContent = crear('div', 'px-2 flex flex-col flex-grow');
+        divContent.appendChild(crear('span', 'text-purple-400 text-[11px] font-bold tracking-widest uppercase mb-1', producto.categoria));
+        divContent.appendChild(crear('h3', 'text-xl md:text-2xl font-serif text-gray-900 line-clamp-2 leading-tight mb-4 min-h-[3.5rem]', producto.nombre));
+
+        // Footer (Precio y Botón)
+        const divFooter = crear('div', 'mt-auto');
+        const divPrecioRow = crear('div', 'flex items-end gap-2 mb-6');
+        const divPrecios = crear('div', 'flex flex-col');
+
+        if (producto.precioOriginal) {
+            divPrecios.appendChild(crear('p', 'text-sm text-gray-500 line-through font-semibold leading-none mb-1', '$' + producto.precioOriginal.toLocaleString('es-CL')));
+        }
+        divPrecios.appendChild(crear('p', 'text-2xl font-bold text-gray-900 tracking-tighter', '$' + precioFormateado));
+        divPrecioRow.appendChild(divPrecios);
+
         if (producto.precioOriginal && producto.precioOriginal > producto.precio) {
             const descuento = Math.round((1 - (producto.precio / producto.precioOriginal)) * 100);
-            htmlDescuento = `<span class="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-lg mb-1 shadow-sm">-${descuento}%</span>`;
+            divPrecioRow.appendChild(crear('span', 'bg-orange-500 text-white text-sm font-bold px-3 py-1.5 rounded-lg mb-1 shadow-sm', `-${descuento}%`));
         }
+        divFooter.appendChild(divPrecioRow);
 
-        // Etiqueta de Novedad condicional
-        const tagNovedad = producto.isNuevo
-            ? `<span class="absolute top-4 left-4 z-10 bg-purple-600 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg">Novedad</span>`
-            : '';
+        // Botón WhatsApp (el SVG es seguro porque es estático)
+        const aBtn = crear('a', 'w-full py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl font-bold shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2');
+        aBtn.href = hrefWa;
+        aBtn.target = '_blank';
+        aBtn.innerHTML = `<svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg> <span class="uppercase tracking-widest text-xs">Consultar</span>`;
+        divFooter.appendChild(aBtn);
+        
+        divContent.appendChild(divFooter);
+        article.appendChild(divContent);
 
-        // Template de la tarjeta copiando el diseño original
-        const cardHTML = `
-            <article class="bg-white/60 backdrop-blur-sm rounded-[2.5rem] p-4 shadow-xl shadow-purple-900/5 border border-white hover:translate-y-[-8px] transition-all duration-500 group flex flex-col">
-                <div class="relative aspect-[4/5] rounded-[2rem] bg-gradient-to-b from-purple-50 to-white overflow-hidden isolate flex items-center justify-center mb-6">
-                    ${tagNovedad}
-                    <img src="${producto.imagenUrl}" alt="${nombreSeguro}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                </div>
-                
-                <div class="px-2 flex flex-col flex-grow">
-                    <span class="text-purple-400 text-[11px] font-bold tracking-widest uppercase mb-1">${categoriaSegura}</span>
-                    <h3 class="text-xl md:text-2xl font-serif text-gray-900 line-clamp-2 leading-tight mb-4 min-h-[3.5rem]">${nombreSeguro}</h3>
-                    
-                    <div class="mt-auto">
-                        <div class="flex items-end gap-2 mb-6">
-                            <div class="flex flex-col">
-                                ${htmlPrecioOriginal}
-                                <p class="text-2xl font-bold text-gray-900 tracking-tighter">$${precioFormateado}</p>
-                            </div>
-                            ${htmlDescuento}
-                        </div>
-                        
-                        <a href="${hrefWa}" target="_blank" class="w-full py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-2xl font-bold shadow-md hover:shadow-lg hover:from-green-600 hover:to-green-700 hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
-                            <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.437 2.503 1.17 3.464l-.794 2.898 3.031-.795a5.733 5.733 0 002.361.599h.001c3.182 0 5.767-2.586 5.768-5.766 0-3.181-2.586-5.766-5.769-5.766zm3.425 8.204c-.145.412-.727.755-1.009.802-.275.044-.633.074-1.025-.054-.24-.078-.543-.186-2.128-.844-1.619-.672-2.656-2.316-2.736-2.424-.081-.107-.655-.872-.655-1.664 0-.792.412-1.18.558-1.339.145-.16.317-.2.423-.2h.304c.107 0 .24-.038.376.289l.52 1.26c.045.107.075.214 0 .367l-.24.397c-.075.122-.157.26-.067.413.089.153.396.654.851 1.059.585.52 1.077.681 1.23.758.153.076.244.06.335-.046l.366-.489c.107-.137.214-.122.35-.077l1.311.64c.138.077.229.123.275.199.046.076.046.443-.1.854z"/></svg>
-                            <span class="uppercase tracking-widest text-xs">Consultar</span>
-                        </a>
-                    </div>
-                </div>
-            </article>
-        `;
-
-        contenedorGaleria.insertAdjacentHTML('beforeend', cardHTML);
+        contenedorGaleria.appendChild(article);
     });
 }
 
@@ -353,6 +347,13 @@ function cerrarSesion() {
     if (btnReset) btnReset.classList.add('hidden');
     abrirGaleria();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // Mostrar mensaje de cierre de sesión
+    const tit = document.getElementById('popup-exito-titulo');
+    const msj = document.getElementById('popup-exito-mensaje');
+    if(tit) tit.textContent = '¡Hasta pronto!';
+    if(msj) msj.textContent = 'Has cerrado sesión exitosamente de tu Estudio Natura.';
+    mostrarPopupExito();
 }
 
 if (btnLogout) btnLogout.addEventListener('click', cerrarSesion);
@@ -406,8 +407,28 @@ if (formNuevoProducto) {
         const imagenUrl = sanitizar(document.getElementById('nuevo-imagen').value.trim());
         const isNuevo = document.getElementById('nuevo-is-nuevo').checked;
 
-        if (!nombre || !precio || !categoria || !imagenUrl) {
+        if(!nombre || !precio || !categoria || !imagenUrl) {
             alert('Por favor completa todos los campos obligatorios.');
+            return;
+        }
+        
+        // --- VALIDACIONES AVANZADAS CON REGEX ---
+        // 1. Validar URL de imagen básica (HTTP/HTTPS)
+        const urlRegex = /^(https?:\/\/)/i;
+        if (!urlRegex.test(imagenUrl)) {
+            alert('La URL de la imagen debe comenzar con http:// o https://');
+            return;
+        }
+
+        // 2. Validar que los precios sean números positivos
+        const numRegex = /^\d+$/;
+        if (!numRegex.test(precio) || precio <= 0) {
+            alert('El precio debe ser un número entero positivo mayor a cero.');
+            return;
+        }
+
+        if (precioOriginal && (!numRegex.test(precioOriginal) || precioOriginal <= 0)) {
+            alert('El precio original debe ser un número entero positivo.');
             return;
         }
 
@@ -505,27 +526,57 @@ function renderizarTablaProductos() {
     inventarioInicial.forEach(producto => {
         const tr = document.createElement('tr');
         tr.className = "hover:bg-purple-50/30 transition-colors";
+        
+        // Imagen
+        const tdImg = document.createElement('td');
+        tdImg.className = "px-6 py-4";
+        const img = document.createElement('img');
+        const isUrlSegura = /^(https?:\/\/)/i.test(producto.imagenUrl);
+        img.src = isUrlSegura ? producto.imagenUrl : 'https://placehold.co/400x500?text=Error';
+        img.className = "w-12 h-12 rounded-lg object-cover shadow-sm";
+        img.alt = producto.nombre;
+        tdImg.appendChild(img);
+        tr.appendChild(tdImg);
 
-        tr.innerHTML = `
-            <td class="px-6 py-4">
-                <img src="${producto.imagenUrl}" alt="${producto.nombre}" class="w-12 h-12 rounded-lg object-cover shadow-sm">
-            </td>
-            <td class="px-6 py-4">
-                <p class="font-bold text-gray-800">${producto.nombre}</p>
-                <p class="text-xs text-purple-400 uppercase tracking-wider">${producto.categoria}</p>
-            </td>
-            <td class="px-6 py-4 font-bold text-gray-600">
-                $${producto.precio.toLocaleString('es-CL')}
-            </td>
-            <td class="px-6 py-4 text-right space-x-2">
-                <button onclick="cargarProductoParaEdicion('${producto.id}')" class="p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" title="Editar">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-                </button>
-                <button onclick="abrirModalEliminar('${producto.id}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
-                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-                </button>
-            </td>
-        `;
+        // Info (Nombre y Categoría)
+        const tdInfo = document.createElement('td');
+        tdInfo.className = "px-6 py-4";
+        const pNombre = document.createElement('p');
+        pNombre.className = "font-bold text-gray-800";
+        pNombre.textContent = producto.nombre;
+        const pCat = document.createElement('p');
+        pCat.className = "text-xs text-purple-400 uppercase tracking-wider";
+        pCat.textContent = producto.categoria;
+        tdInfo.appendChild(pNombre);
+        tdInfo.appendChild(pCat);
+        tr.appendChild(tdInfo);
+
+        // Precio
+        const tdPrecio = document.createElement('td');
+        tdPrecio.className = "px-6 py-4 font-bold text-gray-600";
+        tdPrecio.textContent = '$' + producto.precio.toLocaleString('es-CL');
+        tr.appendChild(tdPrecio);
+
+        // Acciones
+        const tdAcciones = document.createElement('td');
+        tdAcciones.className = "px-6 py-4 text-right space-x-2";
+        
+        const btnEdit = document.createElement('button');
+        btnEdit.className = "p-2 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors";
+        btnEdit.title = "Editar";
+        btnEdit.innerHTML = `<svg class="w-5 h-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>`;
+        btnEdit.onclick = () => cargarProductoParaEdicion(producto.id);
+        
+        const btnDelete = document.createElement('button');
+        btnDelete.className = "p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors";
+        btnDelete.title = "Eliminar";
+        btnDelete.innerHTML = `<svg class="w-5 h-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>`;
+        btnDelete.onclick = () => abrirModalEliminar(producto.id);
+
+        tdAcciones.appendChild(btnEdit);
+        tdAcciones.appendChild(btnDelete);
+        tr.appendChild(tdAcciones);
+
         tbody.appendChild(tr);
     });
 }

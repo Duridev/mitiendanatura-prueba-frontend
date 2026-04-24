@@ -143,3 +143,65 @@ Mensaje dinámico: Utiliza Template Literals (Template Strings) para armar un me
 Seguridad de URL: El mensaje completo debe pasar obligatoriamente por la función encodeURIComponent() antes de concatenarse a la URL base de WhatsApp (https://wa.me/).
 
 Comportamiento: El enlace debe abrirse en una pestaña nueva (target="_blank").
+
+## Séptimo prompt para Antigravity - Auditoría de código -
+
+Actúa como un profesor evaluador estricto de Desarrollo Front-End. > Te voy a proporcionar el código actual de mi proyecto (HTML y JavaScript). Necesito que audites este código contra los siguientes requisitos obligatorios de mi rúbrica de evaluación y me des un reporte detallado indicando "✅ CUMPLE", "⚠️ ADVERTENCIA" o "❌ NO CUMPLE" para cada punto, junto con el código exacto para corregir los errores si los hay.
+
+Requisitos a auditar:
+
+Prevención XSS Estricta: Verifica que NO se esté utilizando innerHTML para inyectar datos del usuario o del array. Exige el uso de document.createElement y textContent.
+
+Validaciones Avanzadas: Revisa las funciones del formulario. ¿Hay RegEx implementado? ¿Se validan números positivos, campos vacíos y formatos correctos antes de guardar?
+
+Estructuras de Datos: Verifica que el estado de la app se maneje a través de un arreglo de objetos y que las actualizaciones (CRUD) se reflejen mutando este arreglo (y el localStorage).
+
+Modularidad y Funciones Puras: Evalúa si el código JavaScript está correctamente factorizado en funciones pequeñas y reutilizables en lugar de código espagueti monolítico.
+
+Manejo del DOM: Verifica que las actualizaciones visuales tras crear, editar o eliminar un registro, o al usar la barra de búsqueda, ocurran de manera fluida y sin fugas de memoria.
+
+Lista de Verificación: Sumativa 2 - INACAP
+1. Seguridad y Validaciones (Criterio 1)
+
+[ ] El formulario de creación/edición tiene al menos 3 tipos de campos distintos (ej. text, number, url o select).
+
+[ ] Hay validaciones con Expresiones Regulares (RegEx) en JavaScript (ej. validar que la URL de la imagen sea válida o que el precio sea solo números).
+
+[ ] CRÍTICO: No hay ningún innerHTML inyectando variables directamente. Todo el renderizado usa document.createElement() y textContent.
+
+2. Datos y Almacenamiento (Criterio 2)
+
+[ ] El inventario principal es un Arreglo.
+
+[ ] Cada producto es un Objeto con sus propiedades bien definidas.
+
+[ ] El sistema lee y guarda correctamente usando localStorage (esto cubre el punto extra de creatividad/funcionalidad).
+
+3. Manipulación del DOM y Eventos (Criterio 3)
+
+[ ] La grilla de productos se actualiza dinámicamente si agregas, editas o eliminas un producto (sin tener que apretar F5).
+
+[ ] El buscador filtra la lista en tiempo real.
+
+[ ] El modal de confirmación para eliminar aparece y desaparece correctamente.
+
+4. Código Modular y Limpio (Criterio 4)
+
+[ ] El código JS no es un solo bloque gigante. Existen funciones con nombres claros como guardarProducto(), renderizarCatalogo(), eliminarProducto().
+
+[ ] El código está comentado explicando qué hace cada bloque principal.
+
+5. Entregables Finales (Criterio 5 y General)
+
+[ ] Creaste el archivo USO_IA.md detallando los prompts que usamos (puedes usar el historial de esta conversación para armarlo).
+
+[ ] El proyecto está subido a un repositorio de GitHub.
+
+[ ] El proyecto está desplegado y visible online (ej. usando GitHub Pages).
+
+
+## octavo prompt para Antigravity - Resolución de Problemas
+
+Al inciar sesión, si no ingreso las credenciales correctas y presiono "Ingresar", no pasa nada, pero recuerdo que antes sí entregaba un mensaje de error.
+
+al cerrar sesión, que aparezca un mensaje que de aviso de esto
