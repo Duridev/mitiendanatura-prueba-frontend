@@ -206,3 +206,4 @@ Al inciar sesión, si no ingreso las credenciales correctas y presiono "Ingresar
 
 al cerrar sesión, que aparezca un mensaje que de aviso de esto
 
+ayúdame con una última cosa? una vez que se haya logueado, pon dos menus en el centro, algo como "Vitrina | Dasboard" y que se oculten cuando se cierre la sesión. Obviamente es para ir del incio al dashboard, porque que sea el logo de natura y el icono de login no es muy intuitivo

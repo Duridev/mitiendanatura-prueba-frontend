@@ -3,8 +3,8 @@
 **Asignatura:** Desarrollo Front-End  
 **Institución:** INACAP  
 **Año:** 2026  
-**Autor:** Daniel Uribe Galaz "Duridev"  
-
+**Autor:** Daniel Uribe Galaz "Duridev"
+**Link página web** <>
 ---
 
 ## 📝 Descripción del Proyecto

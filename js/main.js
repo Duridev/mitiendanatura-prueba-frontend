@@ -256,6 +256,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btnLogout) btnLogout.classList.remove('hidden');
         const btnReset = document.getElementById('btn-reset-db');
         if (btnReset) btnReset.classList.remove('hidden');
+        const navCentral = document.getElementById('nav-central');
+        if (navCentral) navCentral.classList.remove('hidden');
     }
 
     // Verificar si venimos de un reseteo de base de datos
@@ -345,6 +347,8 @@ function cerrarSesion() {
     if (btnLogout) btnLogout.classList.add('hidden');
     const btnReset = document.getElementById('btn-reset-db');
     if (btnReset) btnReset.classList.add('hidden');
+    const navCentral = document.getElementById('nav-central');
+    if (navCentral) navCentral.classList.add('hidden');
     abrirGaleria();
     window.scrollTo({ top: 0, behavior: 'smooth' });
     
@@ -383,6 +387,8 @@ if (formLogin) {
             if (btnLogout) btnLogout.classList.remove('hidden');
             const btnReset = document.getElementById('btn-reset-db');
             if (btnReset) btnReset.classList.remove('hidden');
+            const navCentral = document.getElementById('nav-central');
+            if (navCentral) navCentral.classList.remove('hidden');
             loginError.classList.add('hidden');
             cerrarLoginModal();
             abrirEstudio(); // Redirige al dashboard
