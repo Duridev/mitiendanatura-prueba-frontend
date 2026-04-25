@@ -4,7 +4,9 @@
 **Institución:** INACAP  
 **Año:** 2026  
 **Autor:** Daniel Uribe Galaz "Duridev"
-**Link página web** <>
+**Link página web** <https://mitiendanatura-prueba.netlify.app/>
+**Link Github Pages** <https://duridev.github.io/MitiendaNatura-prueba/>
+*Se recomienda utilizar el link de Netlify, ya que Github Pages tiene problemas de visualización y carga de JavaScript.*
 ---
 
 ## 📝 Descripción del Proyecto
