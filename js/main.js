@@ -162,7 +162,7 @@ function renderizarCatalogo(lista) {
 
         if (producto.precioOriginal && producto.precioOriginal > producto.precio) {
             const descuento = Math.round((1 - (producto.precio / producto.precioOriginal)) * 100);
-            divPrecioRow.appendChild(crear('span', 'bg-orange-500 text-white text-sm font-bold px-3 py-1.5 rounded-lg mb-1 shadow-sm', `-${descuento}%`));
+            divPrecioRow.appendChild(crear('span', 'bg-orange-500 text-white text-sm font-bold px-1.5 py-1 rounded-lg mb-1 shadow-sm', `-${descuento}%`));
         }
         divFooter.appendChild(divPrecioRow);
 
