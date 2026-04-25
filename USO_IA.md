@@ -206,10 +206,3 @@ Al inciar sesión, si no ingreso las credenciales correctas y presiono "Ingresar
 
 al cerrar sesión, que aparezca un mensaje que de aviso de esto
 
-
-### falta:
-
-Readme
-favicon
-footer
-breve descripción inicial del sitio web
