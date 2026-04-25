@@ -3,10 +3,11 @@
 **Asignatura:** Desarrollo Front-End  
 **Institución:** INACAP  
 **Año:** 2026  
-**Autor:** Daniel Uribe Galaz "Duridev"
-**Link página web** <https://mitiendanatura-prueba.netlify.app/>
-**Link Github Pages** <https://duridev.github.io/MitiendaNatura-prueba/>
-*Se recomienda utilizar el link de Netlify, ya que Github Pages tiene problemas de visualización y carga de JavaScript.*
+**Autor:** Daniel Uribe Galaz "Duridev"  
+**Link página web:** [Netlify (Recomendado)](https://mitiendanatura-prueba.netlify.app/)  
+**Link Github Pages:** [GitHub Pages](https://duridev.github.io/MitiendaNatura-prueba/)  
+
+> *Nota: Se recomienda utilizar el enlace de Netlify para la corrección, ya que Github Pages puede presentar problemas intermitentes de visualización y carga de JavaScript.*
 ---
 
 ## 📝 Descripción del Proyecto
@@ -31,7 +32,7 @@ Este proyecto ha sido rigurosamente construido para cumplir y superar los criter
 
 ## ✨ Características Principales
 
-*   **Catálogo Dinámico:** Renderizado en tiempo real a partir del estado de la aplicación.
+*   **Catálogo Dinámico:** Renderizado en tiempo real a partir del estado de la aplicación. *(El proyecto incluye 4 productos pre-cargados como datos de prueba para validar el correcto renderizado del DOM desde el primer inicio).*
 *   **Gestor de Descuentos Automático:** El sistema calcula y muestra porcentajes de descuento de forma automática si un producto contiene un Precio Original y un Precio de Oferta.
 *   **Integración Comercial (WhatsApp):** Enlaces directos para concretar ventas.
 *   **Filtros Interactivos:** Botones que permiten filtrar el inventario instantáneamente por "Categoría" o "Colección".
